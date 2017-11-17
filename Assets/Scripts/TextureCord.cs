@@ -11,8 +11,7 @@ public class TextureCord : MonoBehaviour {
     private float TextureResY;
 
 
-    
-	void Start ()
+    void Start ()
     {
 		
 	}
