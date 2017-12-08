@@ -10,6 +10,11 @@ public class PlanetTextureLocationScript : MonoBehaviour {
     private Texture2D PlanetMap;
     private int[] TextureColorCords = new int[262144];
     private Color[] texCords = new Color[26144];
+    [SerializeField]
+    private Color kanker;
+
+    [SerializeField]
+    private int currennumb;
 
     public Color testColor;
 
@@ -22,9 +27,10 @@ public class PlanetTextureLocationScript : MonoBehaviour {
     {
         FixCords();
 
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W))
         {
             Planetlocation.y += walkSpeed;
+            currennumb++;
             
         }
 
@@ -80,7 +86,16 @@ public class PlanetTextureLocationScript : MonoBehaviour {
 
     void GetTexturePoint()
     {
-        testColor = texCords[250];
+        //testColor = texCords[250];
         //x plus y keer breedte 
+        //currennumb = 118272;
+        testColor = texCords[currennumb];
+        for (int i = 0; i < texCords.Length; i++)
+        {
+            if (texCords[i] == kanker)
+            {
+                Debug.Log(i);
+            }
+        }
     }
 }
