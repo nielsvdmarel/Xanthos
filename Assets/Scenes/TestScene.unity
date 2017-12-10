@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -320,7 +320,6 @@ GameObject:
   - component: {fileID: 130243370}
   - component: {fileID: 130243371}
   - component: {fileID: 130243365}
-  - component: {fileID: 130243372}
   - component: {fileID: 130243373}
   - component: {fileID: 130243374}
   m_Layer: 0
@@ -441,43 +440,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attractor: {fileID: 2133830257}
---- !u!114 &130243372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 130243364}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9603e0c34de954c47b1cf939656b108b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Planetlocation: {x: 0, y: 0}
-  walkSpeed: 0.1
-  PlanetMap: {fileID: 2800000, guid: b9225c62311e6394aa96e6522384fcd9, type: 3}
-  pixel_colour: {r: 1, g: 1, b: 1, a: 0}
-  planetlocationx: 0
-  planetlocationy: 0
-  Boven: []
-  Onder: []
-  Rechts: []
-  Links: []
-  MainPlanetColor: {r: 1, g: 1, b: 1, a: 1}
-  ScanSpaceHorizon: 50
-  ScanSpaceVertical: 50
-  FullSpace: []
-  BuildingColor:
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 0, g: 0.04827571, b: 1, a: 0}
-  - {r: 1, g: 0.9724138, b: 0, a: 0}
-  - {r: 1, g: 0, b: 0.76551723, a: 0}
-  - {r: 0.30882353, g: 0.05676903, b: 0.05676903, a: 0}
-  - {r: 0, g: 0, b: 0, a: 1}
-  - {r: 0, g: 1, b: 0.048275948, a: 0}
-  - {r: 0, g: 0.95862055, b: 1, a: 0}
-  - {r: 1, g: 0.55862063, b: 0, a: 0}
-  - {r: 0.4896555, g: 0, b: 1, a: 0}
-  SpawnedCords: []
 --- !u!114 &130243373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -503,12 +465,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1bca3b524f1e934eba9e8111b430268, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Planetlocation: {x: 0, y: 0}
+  Planetlocation: {x: 255, y: 256}
   walkSpeed: 0.1
   PlanetMap: {fileID: 2800000, guid: fb86d473b072d744393d52c96adfd365, type: 3}
-  kanker: {r: 0, g: 0, b: 0, a: 1}
-  currennumb: 0
-  testColor: {r: 0, g: 0, b: 0, a: 0}
+  CurrentActivePixels: []
+  largenum: 0
+  MainColor: {r: 1, g: 1, b: 1, a: 1}
+  x: 255
+  y: 256
+  CheckSpaceHalf: 25
+  FullScanPixels: 50
+  testColor: {r: 0.4705882, g: 0.35640135, b: 0.35640135, a: 0}
 --- !u!1001 &144583887
 Prefab:
   m_ObjectHideFlags: 0
