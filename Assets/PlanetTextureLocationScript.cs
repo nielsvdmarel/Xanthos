@@ -127,12 +127,13 @@ public class PlanetTextureLocationScript : MonoBehaviour
         int uppointy = y;
         uppointx -= CheckSpaceHalf;
         uppointy += CheckSpaceHalf;
+        Color CurrentColor;
 
         int checkpointUp = uppointx + ((PlanetMap.height - uppointy) * PlanetMap.width);
         for (int i = 0; i < FullScanPixels; i++)
         {
-            testColor = texCords[checkpointUp + i];
-            if (testColor != MainColor)
+            CurrentColor = texCords[checkpointUp + i];
+            if (CurrentColor != MainColor)
             {
                 Vector2 CurrentAdd = new Vector2(uppointx += i, uppointy);
                 if (!CurrentActivePixels.Contains(CurrentAdd))
@@ -155,12 +156,13 @@ public class PlanetTextureLocationScript : MonoBehaviour
         int Downpointy = y;
         Downpointx -= CheckSpaceHalf;
         Downpointy -= CheckSpaceHalf;
+        Color CurrentColor;
 
         int checkpointDown = Downpointx + ((PlanetMap.height - Downpointy) * PlanetMap.width);
         for (int i = 0; i < FullScanPixels; i++)
         {
-            testColor = texCords[checkpointDown + i];
-            if (testColor != MainColor)
+            CurrentColor = texCords[checkpointDown + i];
+            if (CurrentColor != MainColor)
             {
                 Vector2 CurrentAdd = new Vector2(Downpointx += i, Downpointy);
                 if (!CurrentActivePixels.Contains(CurrentAdd))
@@ -183,15 +185,16 @@ public class PlanetTextureLocationScript : MonoBehaviour
         int Leftpointy = y;
         Leftpointx -= CheckSpaceHalf;
         Leftpointy -= CheckSpaceHalf;
+        Color CurrentColor;
 
         for (int i = 0; i < FullScanPixels; i++)
         {
-            int checkpointLeft = Leftpointx + i + ((PlanetMap.height - Leftpointy + i) * PlanetMap.width);
-            testColor = texCords[checkpointLeft];
+            int checkpointLeft = Leftpointx + ((PlanetMap.height - (Leftpointy + i)) * PlanetMap.width);
+            CurrentColor = texCords[checkpointLeft];
 
-            if (testColor != MainColor)
+            if (CurrentColor != MainColor)
             {
-                Vector2 CurrentAdd = new Vector2(Leftpointx, Leftpointy);
+                Vector2 CurrentAdd = new Vector2(Leftpointx, (Leftpointy += i));
                 if (!CurrentActivePixels.Contains(CurrentAdd))
                 {
                     CurrentActivePixels.Add(CurrentAdd);
@@ -211,15 +214,16 @@ public class PlanetTextureLocationScript : MonoBehaviour
         int Rightpointy = y;
         Rightpointx += CheckSpaceHalf;
         Rightpointy -= CheckSpaceHalf;
+        Color CurrentColor;
 
         for (int i = 0; i < FullScanPixels; i++)
         {
-            int checkpointLeft = Rightpointx + i + ((PlanetMap.height - Rightpointy + i) * PlanetMap.width);
-            testColor = texCords[checkpointLeft];
-
-            if (testColor != MainColor)
+            
+            int checkpointRight = Rightpointx + ((PlanetMap.height - (Rightpointy + i)) * PlanetMap.width);
+            CurrentColor = texCords[checkpointRight];
+            if (CurrentColor != MainColor)
             {
-                Vector2 CurrentAdd = new Vector2(Rightpointx, Rightpointy);
+                Vector2 CurrentAdd = new Vector2(Rightpointx, (Rightpointy += i));
                 if (!CurrentActivePixels.Contains(CurrentAdd))
                 {
                     CurrentActivePixels.Add(CurrentAdd);
