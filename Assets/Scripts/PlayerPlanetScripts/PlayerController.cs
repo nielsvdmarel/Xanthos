@@ -15,9 +15,12 @@ public class PlayerController : MonoBehaviour {
     RaycastHit hit;
     private float distToGround;
     public float currentSpeed;
+    public enum Direction { Forward, BackWard, Left, Right, ForwardLeft, ForwardRight, BackwardLeft, BackwardRight, still };
+    public Direction currentMoveDirection;
 
     void Start()
     {
+        currentMoveDirection = Direction.still;
         rb = this.GetComponent<Rigidbody>();
         rb.useGravity = false; // Disables Gravity
         rb.constraints = RigidbodyConstraints.FreezeRotation;
@@ -37,7 +40,7 @@ public class PlayerController : MonoBehaviour {
         if (Physics.Raycast(transform.position, -transform.up, out hit))
         {
             distToGround = hit.distance;
-           // Debug.DrawLine(transform.position, hit.point, Color.cyan);
+            Debug.DrawLine(transform.position, hit.point, Color.cyan);
         }
 
         if (Input.GetButton("Jump") && distToGround < (characterHeight * .5) && jumpRestRemaining < 0)
@@ -45,6 +48,8 @@ public class PlayerController : MonoBehaviour {
             jumpRestRemaining = jumpRest; // Resets the jump counter
             rb.AddRelativeForce(Vector3.up * jumpSpeed * 100); // Adds upward force to the character multitplied by the jump speed, multiplied by 100
         }
+
+        CheckDirection();
     }
 
     void FixedUpdate()
@@ -62,6 +67,56 @@ public class PlayerController : MonoBehaviour {
         if (_FauxGravityAttractor)
         {
             _FauxGravityAttractor.Attract(myTransform);
+        }
+    }
+
+    void CheckDirection()
+    {
+        if (direction.x != 0 || direction.z != 0)
+        {
+            if (direction.x > 0)
+            {
+                currentMoveDirection = Direction.Right;
+            }
+
+            if (direction.x < 0)
+            {
+                currentMoveDirection = Direction.Left;
+            }
+
+            if (direction.z > 0)
+            {
+                currentMoveDirection = Direction.Forward;
+            }
+
+            if (direction.z < 0)
+            {
+                currentMoveDirection = Direction.BackWard;
+            }
+
+            if (direction.x > 0 && direction.z > 0)
+            {
+                currentMoveDirection = Direction.ForwardRight;
+            }
+
+            if (direction.x < 0 && direction.z > 0)
+            {
+                currentMoveDirection = Direction.ForwardLeft;
+            }
+
+            if (direction.x > 0 && direction.z < 0)
+            {
+                currentMoveDirection = Direction.BackwardRight;
+            }
+
+            if (direction.x < 0 && direction.z < 0)
+            {
+                currentMoveDirection = Direction.BackwardLeft;
+            }
+        }
+        else if(currentMoveDirection != Direction.still)
+        {
+            currentMoveDirection = Direction.still;
         }
     }
 }
