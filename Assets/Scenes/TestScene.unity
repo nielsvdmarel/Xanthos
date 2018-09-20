@@ -20,11 +20,11 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 4
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
@@ -998,6 +998,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9bd9b97662b3f514cbf47f20ebbf81eb, type: 3}
   m_IsPrefabParent: 0
+--- !u!95 &491860705 stripped
+Animator:
+  m_PrefabParentObject: {fileID: 9500000, guid: 9bd9b97662b3f514cbf47f20ebbf81eb,
+    type: 3}
+  m_PrefabInternal: {fileID: 491860704}
 --- !u!1 &497743296 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1566218215251712, guid: 5366f3f8dbe09364882e94249246df72,
@@ -2877,8 +2882,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f15f670a968ef2f4db180d97e66fb177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpecificAnimController: {fileID: 0}
-  AnimatorController: {fileID: 0}
+  AnimatorController: {fileID: 491860705}
+  SpecificAnimController: {fileID: 9100000, guid: 5a34a253e35bcae42b26cf5537348717,
+    type: 2}
   RandomInterActAnim: 0
 --- !u!1 &1419250086 stripped
 GameObject:
@@ -2920,6 +2926,100 @@ GameObject:
   m_PrefabParentObject: {fileID: 1554971120010696, guid: 5366f3f8dbe09364882e94249246df72,
     type: 2}
   m_PrefabInternal: {fileID: 770363002}
+--- !u!1 &1497479894
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1497479895}
+  - component: {fileID: 1497479899}
+  - component: {fileID: 1497479898}
+  - component: {fileID: 1497479897}
+  - component: {fileID: 1497479896}
+  m_Layer: 0
+  m_Name: FPVCAM
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1497479895
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1497479894}
+  m_LocalRotation: {x: 0.078459114, y: 0, z: 0, w: 0.99691737}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1857545652}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 9, y: 0, z: 0}
+--- !u!114 &1497479896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1497479894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: acabe44e49a40e048a5e0880219ea271, type: 2}
+--- !u!81 &1497479897
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1497479894}
+  m_Enabled: 1
+--- !u!124 &1497479898
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1497479894}
+  m_Enabled: 1
+--- !u!20 &1497479899
+Camera:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1497479894}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: 3
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 0
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 0
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
 --- !u!1 &1530727306 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1901757383440318, guid: 5366f3f8dbe09364882e94249246df72,
@@ -3309,6 +3409,10 @@ GameObject:
   m_PrefabParentObject: {fileID: 1860551795160848, guid: 5366f3f8dbe09364882e94249246df72,
     type: 2}
   m_PrefabInternal: {fileID: 770363002}
+--- !u!4 &1857545652 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 400056, guid: 9bd9b97662b3f514cbf47f20ebbf81eb, type: 3}
+  m_PrefabInternal: {fileID: 491860704}
 --- !u!1 &1865261723 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1129100911713710, guid: 5366f3f8dbe09364882e94249246df72,

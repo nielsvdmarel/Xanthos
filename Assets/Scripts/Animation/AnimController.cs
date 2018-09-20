@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEditor.Animations;
 
 public class AnimController : MonoBehaviour {
+    [Header("Main needed Components")]
+    public Animator AnimatorController;
     [SerializeField]
     private AnimatorController SpecificAnimController;
-    [SerializeField]
-    private Animator AnimatorController;
+    [Header("Variables")]
     [SerializeField]
     private int RandomInterActAnim;
     private Animation CurrentAnim;
