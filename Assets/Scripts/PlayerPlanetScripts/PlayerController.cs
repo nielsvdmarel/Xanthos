@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour {
     public enum Direction { Forward, BackWard, Left, Right, ForwardLeft, ForwardRight, BackwardLeft, BackwardRight, still };
     public Direction currentMoveDirection;
 
+    public GameObject PlayerModel;
+
     void Start()
     {
         currentMoveDirection = Direction.still;
@@ -77,47 +79,67 @@ public class PlayerController : MonoBehaviour {
             if (direction.x > 0)
             {
                 currentMoveDirection = Direction.Right;
+                FixedPlayerModelRotation(90);
             }
 
             if (direction.x < 0)
             {
                 currentMoveDirection = Direction.Left;
+                FixedPlayerModelRotation(-90);
             }
 
             if (direction.z > 0)
             {
                 currentMoveDirection = Direction.Forward;
+                FixedPlayerModelRotation(0);
             }
 
             if (direction.z < 0)
             {
                 currentMoveDirection = Direction.BackWard;
+                FixedPlayerModelRotation(180);
             }
 
             if (direction.x > 0 && direction.z > 0)
             {
                 currentMoveDirection = Direction.ForwardRight;
+                FixedPlayerModelRotation(25);
             }
 
             if (direction.x < 0 && direction.z > 0)
             {
                 currentMoveDirection = Direction.ForwardLeft;
+                PlayerModel.transform.rotation = Quaternion.Euler(new Vector3(0, -25, 0));
+                FixedPlayerModelRotation(25);
             }
 
             if (direction.x > 0 && direction.z < 0)
             {
                 currentMoveDirection = Direction.BackwardRight;
+                FixedPlayerModelRotation(115);
+
             }
 
             if (direction.x < 0 && direction.z < 0)
             {
                 currentMoveDirection = Direction.BackwardLeft;
+                FixedPlayerModelRotation(-115);
+
             }
         }
-        else if(currentMoveDirection != Direction.still)
+        else if (currentMoveDirection != Direction.still)
         {
             currentMoveDirection = Direction.still;
+            FixedPlayerModelRotation(0);
+
         }
+
     }
+
+    void FixedPlayerModelRotation(int RotY)
+    {
+        PlayerModel.transform.localRotation = Quaternion.Euler(0, RotY, 0);
+    }
+
 }
 
