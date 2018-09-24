@@ -3,54 +3,69 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    public float speed = 15;
+    [Header("Basic Needed variables")]
+    public float speed = 3;
     public float jumpSpeed = 5f;
-    public float characterHeight = 2f;
     private Vector3 direction = Vector3.zero;
+    public Rigidbody rb;
+    public RaycastHit hit;
+    public GameObject DistanceToGroundObject;
+    public CapsuleCollider MainPlayerCollider;
+    [Header("Planet")]
+    [SerializeField]
+    private Transform PlanetTransform;
     public FauxGravityAttractor _FauxGravityAttractor; // Calls the attractor script
-    private Transform myTransform;
-    float jumpRest = 0.05f; // Sets the ammount of time to "rest" between jumps
-    float jumpRestRemaining = 0; //The counter for Jump Rest
-    private Rigidbody rb;
-    RaycastHit hit;
-    private float distToGround;
+    [Header("Movement Variables")]
+    public float distToGround;
     public float currentSpeed;
+    public bool IsGrounded;
     public enum Direction { Forward, BackWard, Left, Right, ForwardLeft, ForwardRight, BackwardLeft, BackwardRight, still };
     public Direction currentMoveDirection;
-
+    [Header("Player rotation")]
     public GameObject PlayerModel;
-
+    public float RotationDegree;
+    public Quaternion TargetRotation;
+    public Vector3 TargetRotVec;
+    public Vector3 PlayerVec;
+    public float RotationSpeed;
+    [Header("Player animation")]
+    public AnimController PlayerAnimController;
     void Start()
     {
-        currentMoveDirection = Direction.still;
         rb = this.GetComponent<Rigidbody>();
+        PlayerAnimController = PlayerModel.GetComponent<AnimController>();
+        currentMoveDirection = Direction.still;
         rb.useGravity = false; // Disables Gravity
         rb.constraints = RigidbodyConstraints.FreezeRotation;
-        myTransform = transform;
+        PlanetTransform = transform;
     }
 
     void Update()
     {
         direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        jumpRestRemaining -= Time.deltaTime; // Counts down the JumpRest Remaining
 
-        if (direction.magnitude > 1)
-        {
+        if (direction.magnitude > 1) {
             direction = direction.normalized; // stops diagonal movement from being faster than straight movement
         }
 
-        if (Physics.Raycast(transform.position, -transform.up, out hit))
+        /*
+        if (Physics.Raycast(DistanceToGroundObject.transform.position, -transform.up, out hit))
         {
             distToGround = hit.distance;
-            Debug.DrawLine(transform.position, hit.point, Color.cyan);
+            Debug.DrawLine(DistanceToGroundObject.transform.position, hit.point, Color.cyan);
+        }
+        */
+
+        if (Input.GetButton("Jump") && IsGrounded)
+        { 
+            rb.AddRelativeForce(Vector3.up * jumpSpeed * 1);
+            IsGrounded = true;
         }
 
-        if (Input.GetButton("Jump") && distToGround < (characterHeight * .5) && jumpRestRemaining < 0)
-        { // If the jump button is pressed and the ground is less the 1/2 the hight of the character away from the character:
-            jumpRestRemaining = jumpRest; // Resets the jump counter
-            rb.AddRelativeForce(Vector3.up * jumpSpeed * 100); // Adds upward force to the character multitplied by the jump speed, multiplied by 100
-        }
+        
 
+
+        RotationUpdate();
         CheckDirection();
     }
 
@@ -64,11 +79,11 @@ public class PlayerController : MonoBehaviour {
         }
         else
         {
-            currentSpeed = 0;
+            currentSpeed = Mathf.SmoothStep(currentSpeed, 0, 3 * Time.deltaTime);
         }
         if (_FauxGravityAttractor)
         {
-            _FauxGravityAttractor.Attract(myTransform);
+            _FauxGravityAttractor.Attract(PlanetTransform);
         }
     }
 
@@ -109,8 +124,7 @@ public class PlayerController : MonoBehaviour {
             if (direction.x < 0 && direction.z > 0)
             {
                 currentMoveDirection = Direction.ForwardLeft;
-                PlayerModel.transform.rotation = Quaternion.Euler(new Vector3(0, -25, 0));
-                FixedPlayerModelRotation(25);
+                FixedPlayerModelRotation(-25);
             }
 
             if (direction.x > 0 && direction.z < 0)
@@ -130,7 +144,6 @@ public class PlayerController : MonoBehaviour {
         else if (currentMoveDirection != Direction.still)
         {
             currentMoveDirection = Direction.still;
-            FixedPlayerModelRotation(0);
 
         }
 
@@ -138,7 +151,15 @@ public class PlayerController : MonoBehaviour {
 
     void FixedPlayerModelRotation(int RotY)
     {
-        PlayerModel.transform.localRotation = Quaternion.Euler(0, RotY, 0);
+        TargetRotation.y = RotY;
+        TargetRotVec.y = RotY;
+        RotationDegree = RotY;
+        //PlayerModel.transform.localRotation = Quaternion.Euler(0, RotY, 0);
+    }
+
+    void RotationUpdate()
+    {
+        PlayerModel.transform.localRotation = Quaternion.Slerp(PlayerModel.transform.localRotation, Quaternion.LookRotation(direction.normalized), RotationSpeed);
     }
 
 }
