@@ -352,6 +352,7 @@ ModelImporter:
     7400024: rig|talk_04
     7400026: rig|walk
     7400028: rig|waving
+    7400030: rig|idle (1)
     9500000: //RootNode
     13700000: lone_cloth
     13700002: lone_skin
@@ -383,10 +384,10 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: rig|fly_with_hood
-      takeName: rig|fly_with_hood
+      name: rig|idle (1)
+      takeName: rig|idle
       firstFrame: 0
-      lastFrame: 20
+      lastFrame: 70
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
