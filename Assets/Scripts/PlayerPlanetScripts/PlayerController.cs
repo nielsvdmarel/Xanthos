@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
     [Header("Basic Needed variables")]
-    public float speed = 3;
+    public float SpeedTime = .5f;
+    [SerializeField]
+    private float MaxRunningSpeed;
+    [SerializeField]
+    private float MaxWalkingSpeed;
+    [SerializeField]
+    private float TargetSpeed;
     public float jumpSpeed = 5f;
     private Vector3 direction = Vector3.zero;
     public Rigidbody rb;
@@ -21,6 +27,8 @@ public class PlayerController : MonoBehaviour {
     public bool IsGrounded;
     public enum Direction { Forward, BackWard, Left, Right, ForwardLeft, ForwardRight, BackwardLeft, BackwardRight, still };
     public Direction currentMoveDirection;
+    public enum SpeedMovement { Idle, Walking, Running}
+    public SpeedMovement CurrentSpeedMovement;
     [Header("Player rotation")]
     public GameObject PlayerModel;
     public float RotationDegree;
@@ -35,6 +43,7 @@ public class PlayerController : MonoBehaviour {
         rb = this.GetComponent<Rigidbody>();
         PlayerAnimController = PlayerModel.GetComponent<AnimController>();
         currentMoveDirection = Direction.still;
+        CurrentSpeedMovement = SpeedMovement.Idle;
         rb.useGravity = false; // Disables Gravity
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         PlanetTransform = transform;
@@ -43,11 +52,10 @@ public class PlayerController : MonoBehaviour {
     void Update()
     {
         direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-
+        currentSpeed = Mathf.Lerp(currentSpeed, TargetSpeed, Time.deltaTime * SpeedTime);
         if (direction.magnitude > 1) {
             direction = direction.normalized; // stops diagonal movement from being faster than straight movement
         }
-
         /*
         if (Physics.Raycast(DistanceToGroundObject.transform.position, -transform.up, out hit))
         {
@@ -56,15 +64,10 @@ public class PlayerController : MonoBehaviour {
         }
         */
 
-        if (Input.GetButton("Jump") && IsGrounded)
-        { 
+        if (Input.GetButton("Jump") && IsGrounded) { 
             rb.AddRelativeForce(Vector3.up * jumpSpeed * 1);
             IsGrounded = true;
         }
-
-        
-
-
         RotationUpdate();
         CheckDirection();
     }
@@ -72,18 +75,23 @@ public class PlayerController : MonoBehaviour {
     void FixedUpdate()
     {
         rb.MovePosition(rb.position + transform.TransformDirection(direction) * currentSpeed * Time.deltaTime);
-
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
         {
-            currentSpeed = Mathf.SmoothStep(currentSpeed, speed, 3 * Time.deltaTime);
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                TargetSpeed = MaxRunningSpeed;
+                CurrentSpeedMovement = SpeedMovement.Running;
+            }
+
+            else
+            {
+                TargetSpeed = MaxWalkingSpeed;
+                CurrentSpeedMovement = SpeedMovement.Walking;
+            }
         }
-        else
-        {
-            currentSpeed = Mathf.SmoothStep(currentSpeed, 0, 3 * Time.deltaTime);
-        }
-        if (_FauxGravityAttractor)
-        {
-            _FauxGravityAttractor.Attract(PlanetTransform);
+        else {
+            TargetSpeed = 0;
+            CurrentSpeedMovement = SpeedMovement.Idle;
         }
     }
 
@@ -144,7 +152,6 @@ public class PlayerController : MonoBehaviour {
         else if (currentMoveDirection != Direction.still)
         {
             currentMoveDirection = Direction.still;
-
         }
 
     }

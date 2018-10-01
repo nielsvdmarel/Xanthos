@@ -29,22 +29,22 @@ public class AnimController : MonoBehaviour {
     }
 
     void Movement() {
-        if(playerController.currentSpeed > .1 && playerController.currentSpeed < .5)
+        if(playerController.CurrentSpeedMovement == PlayerController.SpeedMovement.Idle)
         {
-            AnimatorController.SetFloat("Speed", 0);
-            AnimatorController.SetFloat("InputMagnitude", 1);
-        }
-
-        if(playerController.currentSpeed > .5)
-        {
-            AnimatorController.SetFloat("Speed", 1);
-            AnimatorController.SetFloat("InputMagnitude", 1);
-        }
-
-        if(playerController.currentSpeed > .05 && playerController.currentSpeed < .1)
-        {
+            AnimatorController.SetFloat("Speed", Mathf.Lerp(AnimatorController.GetFloat("Speed"), 0, Time.deltaTime * 15));
             AnimatorController.SetFloat("InputMagnitude", 0);
-            AnimatorController.SetFloat("Speed", 0);
+        }
+
+        if(playerController.CurrentSpeedMovement == PlayerController.SpeedMovement.Walking)
+        {
+            AnimatorController.SetFloat("Speed", Mathf.Lerp(AnimatorController.GetFloat("Speed"), 0f, Time.deltaTime * 8));
+            AnimatorController.SetFloat("InputMagnitude", 1);
+        }
+
+        if(playerController.CurrentSpeedMovement == PlayerController.SpeedMovement.Running)
+        {
+            AnimatorController.SetFloat("Speed", Mathf.Lerp(AnimatorController.GetFloat("Speed"), 1, Time.deltaTime * 6));
+            AnimatorController.SetFloat("InputMagnitude", 1);
         }
     }
 
