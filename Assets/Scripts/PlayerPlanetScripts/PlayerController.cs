@@ -68,7 +68,10 @@ public class PlayerController : MonoBehaviour {
             rb.AddRelativeForce(Vector3.up * jumpSpeed * 1);
             IsGrounded = true;
         }
-        RotationUpdate();
+        if(currentMoveDirection != Direction.still)
+        {
+            RotationUpdate();
+        }
         CheckDirection();
     }
 

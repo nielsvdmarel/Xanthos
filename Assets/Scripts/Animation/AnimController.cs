@@ -31,8 +31,8 @@ public class AnimController : MonoBehaviour {
     void Movement() {
         if(playerController.CurrentSpeedMovement == PlayerController.SpeedMovement.Idle)
         {
-            AnimatorController.SetFloat("Speed", Mathf.Lerp(AnimatorController.GetFloat("Speed"), 0, Time.deltaTime * 15));
-            AnimatorController.SetFloat("InputMagnitude", 0);
+            AnimatorController.SetFloat("Speed", Mathf.Lerp(AnimatorController.GetFloat("Speed"), 0, Time.deltaTime * 5));
+            AnimatorController.SetFloat("InputMagnitude", Mathf.Lerp(AnimatorController.GetFloat("InputMagnitude"), 0, Time.deltaTime * 15));
         }
 
         if(playerController.CurrentSpeedMovement == PlayerController.SpeedMovement.Walking)
