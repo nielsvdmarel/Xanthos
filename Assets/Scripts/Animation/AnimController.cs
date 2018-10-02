@@ -26,6 +26,7 @@ public class AnimController : MonoBehaviour {
             CurrentAnim = this.gameObject.GetComponent<Animation>();
         }
         Movement();
+        JumpAnim();
     }
 
     void Movement() {
@@ -57,7 +58,22 @@ public class AnimController : MonoBehaviour {
     }
 
     void JumpAnim() {
+        if (!playerController.IsGrounded)
+        {
+            //AnimatorController.applyRootMotion = true;
+            //AnimatorController.SetBool("SmallJump", true);
+        }
 
+        if (playerController.IsGrounded)
+        {
+            //AnimatorController.applyRootMotion = false;
+            //AnimatorController.SetBool("SmallJump", false);
+        }
+
+        if(playerController.IsJumping == true)
+        {
+            StartCoroutine(JumpAnimTimer());
+        }
     }
 
     void InteractAnim() {
@@ -72,6 +88,21 @@ public class AnimController : MonoBehaviour {
 
     void HoodAnimHandler(bool HoodState) {
 
+    }
+
+    private IEnumerator JumpAnimTimer()
+    {
+       
+            AnimatorController.applyRootMotion = true;
+            AnimatorController.SetBool("SmallJump", true);
+            AnimatorController.SetBool("Movement", false);
+        if (AnimatorController.GetCurrentAnimatorStateInfo(0).IsName("rig|jump_all"))
+        {
+            yield return new WaitForSeconds(AnimatorController.GetCurrentAnimatorStateInfo(0).length);
+            playerController.IsJumping = false;
+            AnimatorController.SetBool("Movement", true);
+            AnimatorController.SetBool("SmallJump", false);
+        }
     }
 
 

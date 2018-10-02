@@ -309,15 +309,16 @@ MonoBehaviour:
   MaxRunningSpeed: 1
   MaxWalkingSpeed: 0.3
   TargetSpeed: 0
-  jumpSpeed: 1
+  jumpHeight: 150
   rb: {fileID: 0}
   DistanceToGroundObject: {fileID: 998816547}
   MainPlayerCollider: {fileID: 130243366}
   PlanetTransform: {fileID: 2133830261}
   _FauxGravityAttractor: {fileID: 2133830257}
-  distToGround: 0
+  distToGround: 0.1
   currentSpeed: 0
   IsGrounded: 0
+  IsJumping: 0
   currentMoveDirection: 0
   CurrentSpeedMovement: 0
   PlayerModel: {fileID: 1416146153}
@@ -347,7 +348,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 130243364}
   m_LocalRotation: {x: 0, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 10.315, z: 0}
+  m_LocalPosition: {x: 0, y: 10.546, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children:
   - {fileID: 998816548}

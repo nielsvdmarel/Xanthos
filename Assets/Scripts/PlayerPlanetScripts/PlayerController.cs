@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour {
     private float MaxWalkingSpeed;
     [SerializeField]
     private float TargetSpeed;
-    public float jumpSpeed = 5f;
+    public float jumpHeight = 5f;
     private Vector3 direction = Vector3.zero;
     public Rigidbody rb;
     public RaycastHit hit;
@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour {
     public float distToGround;
     public float currentSpeed;
     public bool IsGrounded;
+    public bool IsJumping;
     public enum Direction { Forward, BackWard, Left, Right, ForwardLeft, ForwardRight, BackwardLeft, BackwardRight, still };
     public Direction currentMoveDirection;
     public enum SpeedMovement { Idle, Walking, Running}
@@ -56,19 +57,27 @@ public class PlayerController : MonoBehaviour {
         if (direction.magnitude > 1) {
             direction = direction.normalized; // stops diagonal movement from being faster than straight movement
         }
-        /*
+        
         if (Physics.Raycast(DistanceToGroundObject.transform.position, -transform.up, out hit))
         {
             distToGround = hit.distance;
             Debug.DrawLine(DistanceToGroundObject.transform.position, hit.point, Color.cyan);
         }
-        */
 
-        if (Input.GetButton("Jump") && IsGrounded) { 
-            rb.AddRelativeForce(Vector3.up * jumpSpeed * 1);
-            IsGrounded = true;
+        if (IsGrounded)
+        {
+            if (Input.GetButtonDown("Jump"))
+            {
+                //rb.AddForce(Vector3.up * jumpHeight);
+            }
         }
-        if(currentMoveDirection != Direction.still)
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            IsJumping = true;
+        }
+
+        if (currentMoveDirection != Direction.still && IsGrounded)
         {
             RotationUpdate();
         }
@@ -77,7 +86,10 @@ public class PlayerController : MonoBehaviour {
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position + transform.TransformDirection(direction) * currentSpeed * Time.deltaTime);
+        if (!IsJumping)
+        {
+            rb.MovePosition(rb.position + transform.TransformDirection(direction) * currentSpeed * Time.deltaTime);
+        }
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
         {
             if (Input.GetKey(KeyCode.LeftShift))
@@ -170,6 +182,22 @@ public class PlayerController : MonoBehaviour {
     void RotationUpdate()
     {
         PlayerModel.transform.localRotation = Quaternion.Slerp(PlayerModel.transform.localRotation, Quaternion.LookRotation(direction.normalized), RotationSpeed);
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Planet")
+        {
+            IsGrounded = true;
+        }
+    }
+
+    void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.tag == "Planet")
+        {
+            IsGrounded = false;
+        }
     }
 
 }
