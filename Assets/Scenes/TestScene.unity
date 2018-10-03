@@ -309,12 +309,14 @@ MonoBehaviour:
   MaxRunningSpeed: 1
   MaxWalkingSpeed: 0.3
   TargetSpeed: 0
-  jumpHeight: 150
+  JumpHeight: 87.57
+  JumpPower: 60
   rb: {fileID: 0}
   DistanceToGroundObject: {fileID: 998816547}
   MainPlayerCollider: {fileID: 130243366}
   PlanetTransform: {fileID: 2133830261}
-  _FauxGravityAttractor: {fileID: 2133830257}
+  CurrentGravityBody: {fileID: 0}
+  CurrentGravityAttractor: {fileID: 0}
   distToGround: 0.1
   currentSpeed: 0
   IsGrounded: 0

@@ -92,8 +92,6 @@ public class AnimController : MonoBehaviour {
 
     private IEnumerator JumpAnimTimer()
     {
-       
-            AnimatorController.applyRootMotion = true;
             AnimatorController.SetBool("SmallJump", true);
             AnimatorController.SetBool("Movement", false);
         if (AnimatorController.GetCurrentAnimatorStateInfo(0).IsName("rig|jump_all"))

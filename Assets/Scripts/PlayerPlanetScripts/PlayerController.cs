@@ -11,7 +11,9 @@ public class PlayerController : MonoBehaviour {
     private float MaxWalkingSpeed;
     [SerializeField]
     private float TargetSpeed;
-    public float jumpHeight = 5f;
+    public float JumpHeight = 5f;
+    [SerializeField]
+    private float JumpPower;
     private Vector3 direction = Vector3.zero;
     public Rigidbody rb;
     public RaycastHit hit;
@@ -20,7 +22,11 @@ public class PlayerController : MonoBehaviour {
     [Header("Planet")]
     [SerializeField]
     private Transform PlanetTransform;
-    public FauxGravityAttractor _FauxGravityAttractor; // Calls the attractor script
+    [Header("Planet gravity settings")]
+    [SerializeField]
+    private FauxGravityBody CurrentGravityBody;
+    [SerializeField]
+    private FauxGravityAttractor CurrentGravityAttractor;
     [Header("Movement Variables")]
     public float distToGround;
     public float currentSpeed;
@@ -39,15 +45,17 @@ public class PlayerController : MonoBehaviour {
     public float RotationSpeed;
     [Header("Player animation")]
     public AnimController PlayerAnimController;
+
     void Start()
     {
+        CurrentGravityBody = this.GetComponent<FauxGravityBody>();
+        CurrentGravityAttractor = CurrentGravityBody.attractor;
         rb = this.GetComponent<Rigidbody>();
         PlayerAnimController = PlayerModel.GetComponent<AnimController>();
         currentMoveDirection = Direction.still;
         CurrentSpeedMovement = SpeedMovement.Idle;
         rb.useGravity = false; // Disables Gravity
         rb.constraints = RigidbodyConstraints.FreezeRotation;
-        PlanetTransform = transform;
     }
 
     void Update()
@@ -63,12 +71,13 @@ public class PlayerController : MonoBehaviour {
             distToGround = hit.distance;
             Debug.DrawLine(DistanceToGroundObject.transform.position, hit.point, Color.cyan);
         }
-
         if (IsGrounded)
         {
             if (Input.GetButtonDown("Jump"))
             {
-                //rb.AddForce(Vector3.up * jumpHeight);
+                rb.AddForce(direction.normalized * JumpPower);
+                rb.AddForce(Vector3.up * JumpHeight);// lol basic dash
+                //rb.AddForce(direction * JumpPower); // lol basic dash
             }
         }
 
@@ -176,7 +185,6 @@ public class PlayerController : MonoBehaviour {
         TargetRotation.y = RotY;
         TargetRotVec.y = RotY;
         RotationDegree = RotY;
-        //PlayerModel.transform.localRotation = Quaternion.Euler(0, RotY, 0);
     }
 
     void RotationUpdate()
@@ -184,20 +192,22 @@ public class PlayerController : MonoBehaviour {
         PlayerModel.transform.localRotation = Quaternion.Slerp(PlayerModel.transform.localRotation, Quaternion.LookRotation(direction.normalized), RotationSpeed);
     }
 
-    void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.tag == "Planet")
-        {
+    void OnCollisionEnter(Collision other) {
+        if (other.gameObject.tag == "Planet") {
             IsGrounded = true;
+            SetGravityLower(-10); // weg halen als er andere gravtiy's worden veranderd, zoals een + gravity bij damage etc. overide nu alles
         }
     }
 
-    void OnCollisionExit(Collision other)
-    {
-        if (other.gameObject.tag == "Planet")
-        {
+    void OnCollisionExit(Collision other) {
+        if (other.gameObject.tag == "Planet") {
             IsGrounded = false;
+            SetGravityLower(-4); // weg halen als er andere gravtiy's worden veranderd, zoals een + gravity bij damage etc. overide nu alles
         }
+    }
+
+    public void SetGravityLower(int gravity) {
+        CurrentGravityAttractor.gravity = gravity;
     }
 
 }
