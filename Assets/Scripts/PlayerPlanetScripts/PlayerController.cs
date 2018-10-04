@@ -98,28 +98,31 @@ public class PlayerController : MonoBehaviour {
 
     void FixedUpdate()
     {
-        if (!IsJumping)
-        {
-            rb.MovePosition(rb.position + transform.TransformDirection(direction) * currentSpeed * Time.deltaTime);
-        }
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
-        {
-            if (Input.GetKey(KeyCode.LeftShift))
+         if (!IsJumping)
             {
-                TargetSpeed = MaxRunningSpeed;
-                CurrentSpeedMovement = SpeedMovement.Running;
+                rb.MovePosition(rb.position + transform.TransformDirection(direction) * currentSpeed * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+            {
+                if (Input.GetButton("Fire3"))
+                {
+                    TargetSpeed = MaxRunningSpeed;
+                    CurrentSpeedMovement = SpeedMovement.Running;
+                }
+
+                else
+                {
+                    TargetSpeed = MaxWalkingSpeed;
+                    CurrentSpeedMovement = SpeedMovement.Walking;
+                }
             }
 
             else
             {
-                TargetSpeed = MaxWalkingSpeed;
-                CurrentSpeedMovement = SpeedMovement.Walking;
+                TargetSpeed = 0;
+                CurrentSpeedMovement = SpeedMovement.Idle;
             }
-        }
-        else {
-            TargetSpeed = 0;
-            CurrentSpeedMovement = SpeedMovement.Idle;
-        }
+       
     }
 
     void CheckDirection()
