@@ -75,15 +75,18 @@ public class PlayerController : MonoBehaviour {
         {
             if (Input.GetButtonDown("Jump"))
             {
-                rb.AddForce(direction.normalized * JumpPower);
-                rb.AddForce(Vector3.up * JumpHeight);// lol basic dash
-                //rb.AddForce(direction * JumpPower); // lol basic dash
+                if (Input.GetKeyDown(KeyCode.LeftShift)) { }
+                if(!IsJumping)
+                {
+                    IsJumping = true;
+                    //rb.AddForce(direction.normalized * JumpPower);
+                    //rb.AddForce(Vector3.up * JumpHeight);// lol basic dash
+                    /////rb.AddForce(PlayerModel.transform.up * JumpHeight);
+                    /////rb.AddForce(PlayerModel.transform.forward * JumpPower);
+                    StartCoroutine(JumpTimer());
+                    //rb.AddForce(direction * JumpPower); // lol basic dash
+                }
             }
-        }
-
-        if (Input.GetButtonDown("Jump"))
-        {
-            IsJumping = true;
         }
 
         if (currentMoveDirection != Direction.still && IsGrounded)
@@ -195,6 +198,7 @@ public class PlayerController : MonoBehaviour {
     void OnCollisionEnter(Collision other) {
         if (other.gameObject.tag == "Planet") {
             IsGrounded = true;
+            IsJumping = false;
             SetGravityLower(-10); // weg halen als er andere gravtiy's worden veranderd, zoals een + gravity bij damage etc. overide nu alles
         }
     }
@@ -208,6 +212,13 @@ public class PlayerController : MonoBehaviour {
 
     public void SetGravityLower(int gravity) {
         CurrentGravityAttractor.gravity = gravity;
+    }
+
+    public IEnumerator JumpTimer()
+    {
+        yield return new WaitForSeconds(.2f);
+        rb.AddForce(PlayerModel.transform.up * JumpHeight);
+        rb.AddForce(PlayerModel.transform.forward * JumpPower);
     }
 
 }

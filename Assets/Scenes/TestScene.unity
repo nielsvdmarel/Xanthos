@@ -309,8 +309,8 @@ MonoBehaviour:
   MaxRunningSpeed: 1
   MaxWalkingSpeed: 0.3
   TargetSpeed: 0
-  JumpHeight: 87.57
-  JumpPower: 60
+  JumpHeight: 93.55
+  JumpPower: 37.9
   rb: {fileID: 0}
   DistanceToGroundObject: {fileID: 998816547}
   MainPlayerCollider: {fileID: 130243366}
@@ -1192,7 +1192,7 @@ GameObject:
   - component: {fileID: 672234762}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Planet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

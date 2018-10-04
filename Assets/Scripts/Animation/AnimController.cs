@@ -47,6 +47,12 @@ public class AnimController : MonoBehaviour {
             AnimatorController.SetFloat("Speed", Mathf.Lerp(AnimatorController.GetFloat("Speed"), 1, Time.deltaTime * 6));
             AnimatorController.SetFloat("InputMagnitude", 1);
         }
+
+        if (playerController.IsGrounded)
+        {
+            AnimatorController.SetBool("Movement", true);
+            AnimatorController.SetBool("SmallJump", false);
+        }
     }
 
     void WalkAnim() {
@@ -98,8 +104,8 @@ public class AnimController : MonoBehaviour {
         {
             yield return new WaitForSeconds(AnimatorController.GetCurrentAnimatorStateInfo(0).length);
             playerController.IsJumping = false;
-            AnimatorController.SetBool("Movement", true);
-            AnimatorController.SetBool("SmallJump", false);
+            //AnimatorController.SetBool("Movement", true);
+            //AnimatorController.SetBool("SmallJump", false);
         }
     }
 

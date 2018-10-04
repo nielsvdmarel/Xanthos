@@ -527,7 +527,7 @@ ModelImporter:
       name: rig|jump_all
       takeName: rig|jump_all
       firstFrame: 0
-      lastFrame: 75
+      lastFrame: 55.199997
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
