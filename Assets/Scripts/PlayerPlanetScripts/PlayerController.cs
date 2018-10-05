@@ -45,6 +45,11 @@ public class PlayerController : MonoBehaviour {
     public float RotationSpeed;
     [Header("Player animation")]
     public AnimController PlayerAnimController;
+    [Header("Controller input")]
+    private string[] names;
+    public int Xbox_One_Controller = 0;
+    public int PS4_Controller = 0;
+    public bool ControllerConnected = false;
 
     void Start()
     {
@@ -56,6 +61,8 @@ public class PlayerController : MonoBehaviour {
         CurrentSpeedMovement = SpeedMovement.Idle;
         rb.useGravity = false; // Disables Gravity
         rb.constraints = RigidbodyConstraints.FreezeRotation;
+        // controller sided;
+        CheckForController();
     }
 
     void Update()
@@ -98,31 +105,7 @@ public class PlayerController : MonoBehaviour {
 
     void FixedUpdate()
     {
-         if (!IsJumping)
-            {
-                rb.MovePosition(rb.position + transform.TransformDirection(direction) * currentSpeed * Time.deltaTime);
-            }
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
-            {
-                if (Input.GetButton("Fire3"))
-                {
-                    TargetSpeed = MaxRunningSpeed;
-                    CurrentSpeedMovement = SpeedMovement.Running;
-                }
-
-                else
-                {
-                    TargetSpeed = MaxWalkingSpeed;
-                    CurrentSpeedMovement = SpeedMovement.Walking;
-                }
-            }
-
-            else
-            {
-                TargetSpeed = 0;
-                CurrentSpeedMovement = SpeedMovement.Idle;
-            }
-       
+        Movement();
     }
 
     void CheckDirection()
@@ -224,5 +207,106 @@ public class PlayerController : MonoBehaviour {
         rb.AddForce(PlayerModel.transform.forward * JumpPower);
     }
 
+    void CheckForController()
+    {
+        names = Input.GetJoystickNames();
+        for (int x = 0; x < names.Length; x++)
+        {
+            print(names[x].Length);
+            if (names[x].Length == 19)
+            {
+                print("PS4 CONTROLLER IS CONNECTED");
+                PS4_Controller = 1;
+                Xbox_One_Controller = 0;
+            }
+            if (names[x].Length == 33)
+            {
+                print("XBOX ONE CONTROLLER IS CONNECTED");
+                //set a controller bool to true
+                PS4_Controller = 0;
+                Xbox_One_Controller = 1;
+
+            }
+
+            if(names[x].Length == 0)
+            {
+                PS4_Controller = 0;
+                Xbox_One_Controller = 0;
+            }
+        }
+
+
+        if (Xbox_One_Controller == 1)
+        {
+            ControllerConnected = true;
+        }
+        else if (PS4_Controller == 1)
+        {
+            ControllerConnected = true;
+        }
+        else
+        {
+            ControllerConnected = false;
+        }
+    }
+
+    public void Movement()
+    {
+        if (!ControllerConnected)
+        {
+            if (!IsJumping)
+            {
+                rb.MovePosition(rb.position + transform.TransformDirection(direction) * currentSpeed * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+            {
+                if (Input.GetButton("Fire3"))
+                {
+                    TargetSpeed = MaxRunningSpeed;
+                    CurrentSpeedMovement = SpeedMovement.Running;
+                }
+
+                else
+                {
+                    TargetSpeed = MaxWalkingSpeed;
+                    CurrentSpeedMovement = SpeedMovement.Walking;
+                }
+            }
+
+            else
+            {
+                TargetSpeed = 0;
+                CurrentSpeedMovement = SpeedMovement.Idle;
+            }
+        }
+
+        if (ControllerConnected)
+        {
+            if (!IsJumping)
+            {
+                rb.MovePosition(rb.position + transform.TransformDirection(direction) * currentSpeed * Time.deltaTime);
+            }
+
+            if(direction != new Vector3(0, 0, 0))
+            {
+                if (Input.GetButton("Fire3"))
+                {
+                    TargetSpeed = MaxRunningSpeed;
+                    CurrentSpeedMovement = SpeedMovement.Running;
+                }
+
+                else
+                {
+                    TargetSpeed = MaxWalkingSpeed;
+                    CurrentSpeedMovement = SpeedMovement.Walking;
+                }
+            }
+            else
+            {
+                TargetSpeed = 0;
+                CurrentSpeedMovement = SpeedMovement.Idle;
+            }
+        }
+    }
 }
 
