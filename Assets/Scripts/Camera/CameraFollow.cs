@@ -23,7 +23,8 @@ public class CameraFollow : MonoBehaviour
         }
 
         //transform.position = target.TransformPoint(offsetPosition);
-        transform.position = Vector3.MoveTowards(transform.position, target.position, smoothTime* Time.deltaTime); ;
-          transform.rotation = target.rotation;
+        //transform.position = Vector3.MoveTowards(transform.position, target.position, smoothTime* Time.deltaTime);
+        transform.position = Vector3.Slerp(transform.position, target.position, smoothTime * Time.deltaTime);
+        transform.rotation = target.rotation;
     }
 }
