@@ -5,34 +5,33 @@ using System.Linq;
 
 public class PlanetTextureLocationScript : MonoBehaviour
 {
-    public Vector2 Planetlocation;
+    public Vector2 planetlocation;
     [SerializeField]
     private float walkSpeed;
     [SerializeField]
     private Texture2D PlanetMap;
-    private int[] TextureColorCords = new int[262144];
+    private int[] textureColorCords = new int[262144];
     private Color[] texCords = new Color[26144];
     [SerializeField]
-    private List<Vector2> CurrentActivePixels;
+    private List<Vector2> currentActivePixels;
     public int largenum;
-    public Color MainColor;
+    public Color mainColor;
 
     //cords
     public int x;
     private int xold;
-    public int y;
+    public int y; 
     private int yold;
     [SerializeField]
-    private int CheckSpaceHalf;
+    private int checkSpaceHalf;
     [SerializeField]
-    private int FullScanPixels;
-
+    private int fullScanPixels;
     public Color testColor;
 
     void Start()
     {
         SetTextureColorCords();
-        CurrentActivePixels = new List<Vector2>();
+        currentActivePixels = new List<Vector2>();
         xold = x;
         yold = y;
     }
@@ -45,16 +44,16 @@ public class PlanetTextureLocationScript : MonoBehaviour
             TestAllPoints();
             xold = x;
         }
-
+         
         if (y != yold)
         {
             TestAllPoints();
             yold = y;
-        }
+        }  
 
         if (Input.GetKey(KeyCode.W))
         {
-            Planetlocation.y += walkSpeed;
+            planetlocation.y += walkSpeed;
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -65,43 +64,43 @@ public class PlanetTextureLocationScript : MonoBehaviour
 
         if (Input.GetKey(KeyCode.S))
         {
-            Planetlocation.y -= walkSpeed;
+            planetlocation.y -= walkSpeed;
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            Planetlocation.x += walkSpeed;
+            planetlocation.x += walkSpeed;
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            Planetlocation.x -= walkSpeed;
+            planetlocation.x -= walkSpeed;
         }
     }
 
     void FixCords()
     {
-       x = Mathf.RoundToInt(Planetlocation.x);
-       y = Mathf.RoundToInt(Planetlocation.y);
+       x = Mathf.RoundToInt(planetlocation.x);
+       y = Mathf.RoundToInt(planetlocation.y);
 
-        if (Planetlocation.x > 512)
+        if (planetlocation.x > 512)
         {
-            Planetlocation.x = 0;
+            planetlocation.x = 0;
         }
 
-        if (Planetlocation.x < 0)
+        if (planetlocation.x < 0)
         {
-            Planetlocation.x = 512;
+            planetlocation.x = 512;
         }
 
-        if (Planetlocation.y > 512)
+        if (planetlocation.y > 512)
         {
-            Planetlocation.y = 0;
+            planetlocation.y = 0;
         }
 
-        if (Planetlocation.y < 0)
+        if (planetlocation.y < 0)
         {
-            Planetlocation.y = 512;
+            planetlocation.y = 512;
         }
     }
 
@@ -125,25 +124,25 @@ public class PlanetTextureLocationScript : MonoBehaviour
     {
         int uppointx = x;
         int uppointy = y;
-        uppointx -= CheckSpaceHalf;
-        uppointy += CheckSpaceHalf;
+        uppointx -= checkSpaceHalf;
+        uppointy += checkSpaceHalf;
         Color CurrentColor;
 
         int checkpointUp = uppointx + ((PlanetMap.height - uppointy) * PlanetMap.width);
-        for (int i = 0; i < FullScanPixels; i++)
+        for (int i = 0; i < fullScanPixels; i++)
         {
             CurrentColor = texCords[checkpointUp + i];
-            if (CurrentColor != MainColor)
+            if (CurrentColor != mainColor)
             {
                 Vector2 CurrentAdd = new Vector2(uppointx += i, uppointy);
-                if (!CurrentActivePixels.Contains(CurrentAdd))
+                if (!currentActivePixels.Contains(CurrentAdd))
                 {
-                    CurrentActivePixels.Add(CurrentAdd);
+                    currentActivePixels.Add(CurrentAdd);
                 }
 
-                else if (CurrentActivePixels.Contains(CurrentAdd))
+                else if (currentActivePixels.Contains(CurrentAdd))
                 {
-                    CurrentActivePixels.Remove(CurrentAdd);
+                    currentActivePixels.Remove(CurrentAdd);
                 }
             }
         }
@@ -154,25 +153,25 @@ public class PlanetTextureLocationScript : MonoBehaviour
     {
         int Downpointx = x;
         int Downpointy = y;
-        Downpointx -= CheckSpaceHalf;
-        Downpointy -= CheckSpaceHalf;
+        Downpointx -= checkSpaceHalf;
+        Downpointy -= checkSpaceHalf;
         Color CurrentColor;
 
         int checkpointDown = Downpointx + ((PlanetMap.height - Downpointy) * PlanetMap.width);
-        for (int i = 0; i < FullScanPixels; i++)
+        for (int i = 0; i < fullScanPixels; i++)
         {
             CurrentColor = texCords[checkpointDown + i];
-            if (CurrentColor != MainColor)
+            if (CurrentColor != mainColor)
             {
                 Vector2 CurrentAdd = new Vector2(Downpointx += i, Downpointy);
-                if (!CurrentActivePixels.Contains(CurrentAdd))
+                if (!currentActivePixels.Contains(CurrentAdd))
                 {
-                    CurrentActivePixels.Add(CurrentAdd);
+                    currentActivePixels.Add(CurrentAdd);
                 }
 
-                else if (CurrentActivePixels.Contains(CurrentAdd))
+                else if (currentActivePixels.Contains(CurrentAdd))
                 {
-                    CurrentActivePixels.Remove(CurrentAdd);
+                    currentActivePixels.Remove(CurrentAdd);
                 }
             }
         }
@@ -183,26 +182,26 @@ public class PlanetTextureLocationScript : MonoBehaviour
     {
         int Leftpointx = x;
         int Leftpointy = y;
-        Leftpointx -= CheckSpaceHalf;
-        Leftpointy -= CheckSpaceHalf;
+        Leftpointx -= checkSpaceHalf;
+        Leftpointy -= checkSpaceHalf;
         Color CurrentColor;
 
-        for (int i = 0; i < FullScanPixels; i++)
+        for (int i = 0; i < fullScanPixels; i++)
         {
             int checkpointLeft = Leftpointx + ((PlanetMap.height - (Leftpointy + i)) * PlanetMap.width);
             CurrentColor = texCords[checkpointLeft];
 
-            if (CurrentColor != MainColor)
+            if (CurrentColor != mainColor)
             {
                 Vector2 CurrentAdd = new Vector2(Leftpointx, (Leftpointy += i));
-                if (!CurrentActivePixels.Contains(CurrentAdd))
+                if (!currentActivePixels.Contains(CurrentAdd))
                 {
-                    CurrentActivePixels.Add(CurrentAdd);
+                    currentActivePixels.Add(CurrentAdd);
                 }
 
-                else if (CurrentActivePixels.Contains(CurrentAdd))
+                else if (currentActivePixels.Contains(CurrentAdd))
                 {
-                    CurrentActivePixels.Remove(CurrentAdd);
+                    currentActivePixels.Remove(CurrentAdd);
                 }
             }
         }
@@ -212,26 +211,26 @@ public class PlanetTextureLocationScript : MonoBehaviour
     {
         int Rightpointx = x;
         int Rightpointy = y;
-        Rightpointx += CheckSpaceHalf;
-        Rightpointy -= CheckSpaceHalf;
+        Rightpointx += checkSpaceHalf;
+        Rightpointy -= checkSpaceHalf;
         Color CurrentColor;
 
-        for (int i = 0; i < FullScanPixels; i++)
+        for (int i = 0; i < fullScanPixels; i++)
         {
             
             int checkpointRight = Rightpointx + ((PlanetMap.height - (Rightpointy + i)) * PlanetMap.width);
             CurrentColor = texCords[checkpointRight];
-            if (CurrentColor != MainColor)
+            if (CurrentColor != mainColor)
             {
                 Vector2 CurrentAdd = new Vector2(Rightpointx, (Rightpointy += i));
-                if (!CurrentActivePixels.Contains(CurrentAdd))
+                if (!currentActivePixels.Contains(CurrentAdd))
                 {
-                    CurrentActivePixels.Add(CurrentAdd);
+                    currentActivePixels.Add(CurrentAdd);
                 }
 
-                else if (CurrentActivePixels.Contains(CurrentAdd))
+                else if (currentActivePixels.Contains(CurrentAdd))
                 {
-                    CurrentActivePixels.Remove(CurrentAdd);
+                    currentActivePixels.Remove(CurrentAdd);
                 }
             }
         }
@@ -244,5 +243,4 @@ public class PlanetTextureLocationScript : MonoBehaviour
         GetTexturePointLeft();
         GetTexturePointRight();
     }
-
 }

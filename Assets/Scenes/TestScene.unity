@@ -404,16 +404,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1bca3b524f1e934eba9e8111b430268, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Planetlocation: {x: 200, y: 225}
+  planetlocation: {x: 0, y: 0}
   walkSpeed: 0.1
   PlanetMap: {fileID: 2800000, guid: 28a34dc6fff1b0e4b9f82bffd6146e3e, type: 3}
-  CurrentActivePixels: []
+  currentActivePixels: []
   largenum: 0
-  MainColor: {r: 1, g: 1, b: 1, a: 1}
+  mainColor: {r: 0, g: 0, b: 0, a: 0}
   x: 255
   y: 256
-  CheckSpaceHalf: 25
-  FullScanPixels: 50
+  checkSpaceHalf: 0
+  fullScanPixels: 0
   testColor: {r: 0.4705882, g: 0.35640135, b: 0.35640135, a: 0}
 --- !u!1 &132705597 stripped
 GameObject:
@@ -2866,7 +2866,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 705cdfbc0bb4878499001e3b3f13b292, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.457
+      value: 0.372
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 705cdfbc0bb4878499001e3b3f13b292, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2899,7 +2899,7 @@ Prefab:
     - target: {fileID: 2300000, guid: 705cdfbc0bb4878499001e3b3f13b292, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 40ed1d3caad1d7944af61e1adb181f09, type: 2}
+      objectReference: {fileID: 2100000, guid: 3c9ba631493169749b0a74e1bc1a1987, type: 2}
     - target: {fileID: 400000, guid: 705cdfbc0bb4878499001e3b3f13b292, type: 3}
       propertyPath: m_LocalScale.x
       value: 40
@@ -3290,6 +3290,29 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1472747487209462, guid: 5366f3f8dbe09364882e94249246df72,
     type: 2}
   m_PrefabInternal: {fileID: 770363002}
+--- !u!1 &1572575601 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 705cdfbc0bb4878499001e3b3f13b292,
+    type: 3}
+  m_PrefabInternal: {fileID: 1199307612}
+--- !u!114 &1572575605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1572575601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bed728953b6b5c43825507c82fdac94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disolveFreq: 1
+  disolveSpeed: 1
+  disolvePoint: {x: 0, y: 0, z: 0}
+  disolved: 0
+  maxDist: 25
+  distLimitFac: 1
+  tracker: {fileID: 672234761}
 --- !u!1 &1574930140 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1412936749151084, guid: 5366f3f8dbe09364882e94249246df72,
