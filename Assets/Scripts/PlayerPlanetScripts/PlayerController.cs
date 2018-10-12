@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour {
     public float JumpHeight = 5f;
     [SerializeField]
     private float JumpPower;
-    private Vector3 direction = Vector3.zero;
     public Rigidbody rb;
     public RaycastHit hit;
     public GameObject DistanceToGroundObject;
@@ -45,11 +44,8 @@ public class PlayerController : MonoBehaviour {
     public float RotationSpeed;
     [Header("Player animation")]
     public AnimController PlayerAnimController;
-    [Header("Controller input")]
-    private string[] names;
-    public int Xbox_One_Controller = 0;
-    public int PS4_Controller = 0;
-    public bool ControllerConnected = false;
+    [Header("Input")]
+    public InputManager inputManager;
 
     void Start()
     {
@@ -62,100 +58,66 @@ public class PlayerController : MonoBehaviour {
         rb.useGravity = false; // Disables Gravity
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         // controller sided;
-        CheckForController();
     }
 
     void Update()
     {
-        direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        currentSpeed = Mathf.Lerp(currentSpeed, TargetSpeed, Time.deltaTime * SpeedTime);
-        if (direction.magnitude > 1) {
-            direction = direction.normalized; // stops diagonal movement from being faster than straight movement
-        }
-        
-        if (Physics.Raycast(DistanceToGroundObject.transform.position, -transform.up, out hit))
-        {
-            distToGround = hit.distance;
-            Debug.DrawLine(DistanceToGroundObject.transform.position, hit.point, Color.cyan);
-        }
-        if (IsGrounded)
-        {
-            if (Input.GetButtonDown("Jump"))
-            {
-                if (Input.GetKeyDown(KeyCode.LeftShift)) { }
-                if(!IsJumping)
-                {
-                    IsJumping = true;
-                    //rb.AddForce(direction.normalized * JumpPower);
-                    //rb.AddForce(Vector3.up * JumpHeight);// lol basic dash
-                    /////rb.AddForce(PlayerModel.transform.up * JumpHeight);
-                    /////rb.AddForce(PlayerModel.transform.forward * JumpPower);
-                    StartCoroutine(JumpTimer());
-                    //rb.AddForce(direction * JumpPower); // lol basic dash
-                }
-            }
-        }
-
-        if (currentMoveDirection != Direction.still && IsGrounded)
-        {
-            RotationUpdate();
-        }
-        CheckDirection();
+        MovementUpdate();
     }
 
     void FixedUpdate()
     {
-        Movement();
+        MovementFixedUpdate();
     }
 
     void CheckDirection()
     {
-        if (direction.x != 0 || direction.z != 0)
+        if (inputManager.direction.x != 0 || inputManager.direction.z != 0)
         {
-            if (direction.x > 0)
+            if (inputManager.direction.x > 0)
             {
                 currentMoveDirection = Direction.Right;
                 FixedPlayerModelRotation(90);
             }
 
-            if (direction.x < 0)
+            if (inputManager.direction.x < 0)
             {
                 currentMoveDirection = Direction.Left;
                 FixedPlayerModelRotation(-90);
             }
 
-            if (direction.z > 0)
+            if (inputManager.direction.z > 0)
             {
                 currentMoveDirection = Direction.Forward;
                 FixedPlayerModelRotation(0);
             }
 
-            if (direction.z < 0)
+            if (inputManager.direction.z < 0)
             {
                 currentMoveDirection = Direction.BackWard;
                 FixedPlayerModelRotation(180);
             }
 
-            if (direction.x > 0 && direction.z > 0)
+            if (inputManager.direction.x > 0 && inputManager.direction.z > 0)
             {
                 currentMoveDirection = Direction.ForwardRight;
                 FixedPlayerModelRotation(25);
             }
 
-            if (direction.x < 0 && direction.z > 0)
+            if (inputManager.direction.x < 0 && inputManager.direction.z > 0)
             {
                 currentMoveDirection = Direction.ForwardLeft;
                 FixedPlayerModelRotation(-25);
             }
 
-            if (direction.x > 0 && direction.z < 0)
+            if (inputManager.direction.x > 0 && inputManager.direction.z < 0)
             {
                 currentMoveDirection = Direction.BackwardRight;
                 FixedPlayerModelRotation(115);
 
             }
 
-            if (direction.x < 0 && direction.z < 0)
+            if (inputManager.direction.x < 0 && inputManager.direction.z < 0)
             {
                 currentMoveDirection = Direction.BackwardLeft;
                 FixedPlayerModelRotation(-115);
@@ -178,22 +140,7 @@ public class PlayerController : MonoBehaviour {
 
     void RotationUpdate()
     {
-        PlayerModel.transform.localRotation = Quaternion.Slerp(PlayerModel.transform.localRotation, Quaternion.LookRotation(direction.normalized), RotationSpeed);
-    }
-
-    void OnCollisionEnter(Collision other) {
-        if (other.gameObject.tag == "Planet") {
-            IsGrounded = true;
-            IsJumping = false;
-            SetGravityLower(-10); // weg halen als er andere gravtiy's worden veranderd, zoals een + gravity bij damage etc. overide nu alles
-        }
-    }
-
-    void OnCollisionExit(Collision other) {
-        if (other.gameObject.tag == "Planet") {
-            IsGrounded = false;
-            SetGravityLower(-4); // weg halen als er andere gravtiy's worden veranderd, zoals een + gravity bij damage etc. overide nu alles
-        }
+        PlayerModel.transform.localRotation = Quaternion.Slerp(PlayerModel.transform.localRotation, Quaternion.LookRotation(inputManager.direction.normalized), RotationSpeed);
     }
 
     public void SetGravityLower(int gravity) {
@@ -203,109 +150,139 @@ public class PlayerController : MonoBehaviour {
     public IEnumerator JumpTimer()
     {
         yield return new WaitForSeconds(.2f);
+        Jump();
+    }
+
+    private void Jump()
+    {
         rb.AddForce(PlayerModel.transform.up * JumpHeight);
         rb.AddForce(PlayerModel.transform.forward * JumpPower);
     }
 
-    void CheckForController()
+    public void MovementUpdate()
     {
-        names = Input.GetJoystickNames();
-        for (int x = 0; x < names.Length; x++)
+        currentSpeed = Mathf.Lerp(currentSpeed, TargetSpeed, Time.deltaTime * SpeedTime);
+
+        if (Physics.Raycast(DistanceToGroundObject.transform.position, -transform.up, out hit))
         {
-            print(names[x].Length);
-            if (names[x].Length == 19)
+            distToGround = hit.distance;
+            Debug.DrawLine(DistanceToGroundObject.transform.position, hit.point, Color.cyan);
+        }
+        if (IsGrounded)
+        {
+            if (Input.GetButtonDown("Jump"))
             {
-                print("PS4 CONTROLLER IS CONNECTED");
-                PS4_Controller = 1;
-                Xbox_One_Controller = 0;
-            }
-            if (names[x].Length == 33)
-            {
-                print("XBOX ONE CONTROLLER IS CONNECTED");
-                //set a controller bool to true
-                PS4_Controller = 0;
-                Xbox_One_Controller = 1;
-
-            }
-
-            if(names[x].Length == 0)
-            {
-                PS4_Controller = 0;
-                Xbox_One_Controller = 0;
+                if (Input.GetKeyDown(inputManager.run))
+                {
+                    if (!IsJumping)
+                    {
+                        IsJumping = true;
+                        //rb.AddForce(direction.normalized * JumpPower);
+                        //rb.AddForce(Vector3.up * JumpHeight);// lol basic dash
+                        /////rb.AddForce(PlayerModel.transform.up * JumpHeight);
+                        /////rb.AddForce(PlayerModel.transform.forward * JumpPower);
+                        StartCoroutine(JumpTimer());
+                        //rb.AddForce(direction * JumpPower); // lol basic dash
+                    }
+                }
+                if (!Input.GetKeyDown(inputManager.run))
+                {
+                    if (!IsJumping)
+                    {
+                        IsJumping = true;
+                        //rb.AddForce(direction.normalized * JumpPower);
+                        //rb.AddForce(Vector3.up * JumpHeight);// lol basic dash
+                        /////rb.AddForce(PlayerModel.transform.up * JumpHeight);
+                        /////rb.AddForce(PlayerModel.transform.forward * JumpPower);
+                        StartCoroutine(JumpTimer());
+                        //rb.AddForce(direction * JumpPower); // lol basic dash
+                    }
+                }
             }
         }
 
+        if (currentMoveDirection != Direction.still && IsGrounded)
+        {
+            RotationUpdate();
+        }
+        CheckDirection();
+    }
 
-        if (Xbox_One_Controller == 1)
+    public void MovementFixedUpdate()
+    {
+        if (!inputManager.ControllerConnected)
         {
-            ControllerConnected = true;
+            if (!IsJumping)
+            {
+                rb.MovePosition(rb.position + transform.TransformDirection(inputManager.direction) * currentSpeed * Time.deltaTime);
+            }
+            if (inputManager.direction != Vector3.zero)
+            {
+                if (Input.GetButton("Fire3"))
+                {
+                    TargetSpeed = MaxRunningSpeed;
+                    CurrentSpeedMovement = SpeedMovement.Running;
+                }
+
+                else
+                {
+                    TargetSpeed = MaxWalkingSpeed;
+                    CurrentSpeedMovement = SpeedMovement.Walking;
+                }
+            }
+
+            else
+            {
+                TargetSpeed = 0;
+                CurrentSpeedMovement = SpeedMovement.Idle;
+            }
         }
-        else if (PS4_Controller == 1)
+
+        if (inputManager.ControllerConnected)
         {
-            ControllerConnected = true;
-        }
-        else
-        {
-            ControllerConnected = false;
+            if (!IsJumping)
+            {
+                rb.MovePosition(rb.position + transform.TransformDirection(inputManager.direction) * currentSpeed * Time.deltaTime);
+            }
+
+            if(inputManager.direction != Vector3.zero)
+            {
+                if (Input.GetButton("Fire3"))
+                {
+                    TargetSpeed = MaxRunningSpeed;
+                    CurrentSpeedMovement = SpeedMovement.Running;
+                }
+
+                else
+                {
+                    TargetSpeed = MaxWalkingSpeed;
+                    CurrentSpeedMovement = SpeedMovement.Walking;
+                }
+            }
+            else
+            {
+                TargetSpeed = 0;
+                CurrentSpeedMovement = SpeedMovement.Idle;
+            }
         }
     }
 
-    public void Movement()
+    void OnCollisionEnter(Collision other)
     {
-        if (!ControllerConnected)
+        if (other.gameObject.tag == "Planet")
         {
-            if (!IsJumping)
-            {
-                rb.MovePosition(rb.position + transform.TransformDirection(direction) * currentSpeed * Time.deltaTime);
-            }
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
-            {
-                if (Input.GetButton("Fire3"))
-                {
-                    TargetSpeed = MaxRunningSpeed;
-                    CurrentSpeedMovement = SpeedMovement.Running;
-                }
-
-                else
-                {
-                    TargetSpeed = MaxWalkingSpeed;
-                    CurrentSpeedMovement = SpeedMovement.Walking;
-                }
-            }
-
-            else
-            {
-                TargetSpeed = 0;
-                CurrentSpeedMovement = SpeedMovement.Idle;
-            }
+            IsGrounded = true;
+            IsJumping = false;
+            SetGravityLower(-10); // weg halen als er andere gravtiy's worden veranderd, zoals een + gravity bij damage etc. overide nu alles
         }
+    }
 
-        if (ControllerConnected)
+    void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.tag == "Planet")
         {
-            if (!IsJumping)
-            {
-                rb.MovePosition(rb.position + transform.TransformDirection(direction) * currentSpeed * Time.deltaTime);
-            }
-
-            if(direction != new Vector3(0, 0, 0))
-            {
-                if (Input.GetButton("Fire3"))
-                {
-                    TargetSpeed = MaxRunningSpeed;
-                    CurrentSpeedMovement = SpeedMovement.Running;
-                }
-
-                else
-                {
-                    TargetSpeed = MaxWalkingSpeed;
-                    CurrentSpeedMovement = SpeedMovement.Walking;
-                }
-            }
-            else
-            {
-                TargetSpeed = 0;
-                CurrentSpeedMovement = SpeedMovement.Idle;
-            }
+            IsGrounded = false;
+            SetGravityLower(-4); // weg halen als er andere gravtiy's worden veranderd, zoals een + gravity bij damage etc. overide nu alles
         }
     }
 }

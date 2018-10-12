@@ -287,6 +287,7 @@ GameObject:
   - component: {fileID: 130243371}
   - component: {fileID: 130243365}
   - component: {fileID: 130243374}
+  - component: {fileID: 130243367}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -306,7 +307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpeedTime: 2.5
-  MaxRunningSpeed: 1
+  MaxRunningSpeed: 0.8
   MaxWalkingSpeed: 0.3
   TargetSpeed: 0
   JumpHeight: 93.55
@@ -328,11 +329,9 @@ MonoBehaviour:
   TargetRotation: {x: 0, y: 0, z: 0, w: 0}
   TargetRotVec: {x: 0, y: 0, z: 0}
   PlayerVec: {x: 0, y: 0, z: 0}
-  RotationSpeed: 0.1
+  RotationSpeed: 0.15
   PlayerAnimController: {fileID: 0}
-  Xbox_One_Controller: 0
-  PS4_Controller: 0
-  ControllerConnected: 0
+  inputManager: {fileID: 130243367}
 --- !u!136 &130243366
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -346,6 +345,28 @@ CapsuleCollider:
   m_Height: 1.45
   m_Direction: 1
   m_Center: {x: 0, y: 0.74, z: 0}
+--- !u!114 &130243367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 130243364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87ac91f95d3ca834abfd9c9684268728, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseResumeGame: 27
+  inventory: 9
+  crouch: 99
+  run: 304
+  direction: {x: 0, y: 0, z: 0}
+  forwardKey: 119
+  backWardKey: 115
+  leftKey: 97
+  rightKey: 100
+  xbox_One_Controller: 0
+  pS4_Controller: 0
 --- !u!4 &130243369
 Transform:
   m_ObjectHideFlags: 0
@@ -2783,7 +2804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ff726b42bd3ab4bb85a6d1b391753b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1864567086}
+  target: {fileID: 345741278}
   offsetPosition: {x: 0, y: 0, z: 0}
   smoothTime: 10
 --- !u!114 &1076815782
