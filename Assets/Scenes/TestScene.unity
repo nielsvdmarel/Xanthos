@@ -285,9 +285,9 @@ GameObject:
   - component: {fileID: 130243366}
   - component: {fileID: 130243370}
   - component: {fileID: 130243371}
+  - component: {fileID: 130243367}
   - component: {fileID: 130243365}
   - component: {fileID: 130243374}
-  - component: {fileID: 130243367}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -315,9 +315,6 @@ MonoBehaviour:
   rb: {fileID: 0}
   DistanceToGroundObject: {fileID: 998816547}
   MainPlayerCollider: {fileID: 130243366}
-  PlanetTransform: {fileID: 2133830261}
-  CurrentGravityBody: {fileID: 0}
-  CurrentGravityAttractor: {fileID: 0}
   distToGround: 0.1
   currentSpeed: 0
   IsGrounded: 0
@@ -332,6 +329,9 @@ MonoBehaviour:
   RotationSpeed: 0.15
   PlayerAnimController: {fileID: 0}
   inputManager: {fileID: 130243367}
+  CurrentGravityBody: {fileID: 0}
+  CurrentGravityAttractor: {fileID: 0}
+  PlanetTransform: {fileID: 2133830261}
 --- !u!136 &130243366
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -359,7 +359,8 @@ MonoBehaviour:
   pauseResumeGame: 27
   inventory: 9
   crouch: 99
-  run: 304
+  run: Fire3
+  jump: Jump
   direction: {x: 0, y: 0, z: 0}
   forwardKey: 119
   backWardKey: 115

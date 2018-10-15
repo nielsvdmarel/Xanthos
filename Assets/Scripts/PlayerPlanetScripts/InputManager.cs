@@ -11,8 +11,10 @@ public class InputManager : MonoBehaviour
     public KeyCode Inventory { get { return inventory; } set { inventory = value; } }
     public KeyCode crouch = KeyCode.C;
     public KeyCode Crouch { get { return crouch; } set { crouch = value; } }
-    public KeyCode run = KeyCode.LeftShift;
-    public KeyCode Run { get { return run; } set { run = value; } }
+    public string run = "Fire3";
+    public string Run { get { return run; } set { run = value; } }
+    public string jump = "Jump";
+    public string Jump { get { return jump; } set { jump = value; } }
     public Vector3 direction = Vector3.zero;
 
     [Header("Keyboard Input")]
@@ -27,7 +29,7 @@ public class InputManager : MonoBehaviour
     [Header("Controller input")]
     public int xbox_One_Controller = 0;
     public int pS4_Controller = 0;
-    public bool ControllerConnected { get; private set; }
+    public bool ControllerConnected;
     private string[] names;
 
     private void Start() {
@@ -48,24 +50,32 @@ public class InputManager : MonoBehaviour
 
     void CheckForController() {
         names = Input.GetJoystickNames();
-        for (int x = 0; x < names.Length; x++) {
-            print(names[x].Length);
-            if (names[x].Length == 19) {
-                print("PS4 CONTROLLER IS CONNECTED");
-                pS4_Controller = 1;
-                xbox_One_Controller = 0;
+        if (names.Length > 0)
+        {
+            for (int x = 0; x < names.Length; x++)
+            {
+                if (names[x].Length == 0)
+                {
+                    pS4_Controller = 0;
+                    xbox_One_Controller = 0;
+                    ControllerConnected = false;
+                }
+                if (names[x].Length == 19)
+                {
+                    //("PS4 CONTROLLER IS CONNECTED");
+                    pS4_Controller = 1;
+                    xbox_One_Controller = 0;
+                    ControllerConnected = true;
+                }
+                if (names[x].Length == 33)
+                {
+                    //("XBOX ONE CONTROLLER IS CONNECTED");
+                    pS4_Controller = 0;
+                    xbox_One_Controller = 1;
+                    ControllerConnected = true;
+                }
             }
-            if (names[x].Length == 33) {
-                print("XBOX ONE CONTROLLER IS CONNECTED");
-                //set a controller bool to true
-                pS4_Controller = 0;
-                xbox_One_Controller = 1;
-            }
-
-            if (names[x].Length == 0) {
-                pS4_Controller = 0;
-                xbox_One_Controller = 0;
-            }
+            Debug.Log("Controller connected = " + ControllerConnected);
         }
     }
 

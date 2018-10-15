@@ -18,14 +18,6 @@ public class PlayerController : MonoBehaviour {
     public RaycastHit hit;
     public GameObject DistanceToGroundObject;
     public CapsuleCollider MainPlayerCollider;
-    [Header("Planet")]
-    [SerializeField]
-    private Transform PlanetTransform;
-    [Header("Planet gravity settings")]
-    [SerializeField]
-    private FauxGravityBody CurrentGravityBody;
-    [SerializeField]
-    private FauxGravityAttractor CurrentGravityAttractor;
     [Header("Movement Variables")]
     public float distToGround;
     public float currentSpeed;
@@ -42,10 +34,13 @@ public class PlayerController : MonoBehaviour {
     public Vector3 TargetRotVec;
     public Vector3 PlayerVec;
     public float RotationSpeed;
-    [Header("Player animation")]
+    [Header("Controllers")]
     public AnimController PlayerAnimController;
-    [Header("Input")]
     public InputManager inputManager;
+    [SerializeField] private FauxGravityBody CurrentGravityBody;
+    [SerializeField] private FauxGravityAttractor CurrentGravityAttractor;
+    [Header("Planet")]
+    [SerializeField] private Transform PlanetTransform;
 
     void Start()
     {
@@ -70,76 +65,60 @@ public class PlayerController : MonoBehaviour {
         MovementFixedUpdate();
     }
 
-    void CheckDirection()
-    {
-        if (inputManager.direction.x != 0 || inputManager.direction.z != 0)
-        {
-            if (inputManager.direction.x > 0)
-            {
+    void CheckDirection() {
+        if (inputManager.direction.x != 0 || inputManager.direction.z != 0) {
+            if (inputManager.direction.x > 0) {
                 currentMoveDirection = Direction.Right;
                 FixedPlayerModelRotation(90);
             }
 
-            if (inputManager.direction.x < 0)
-            {
+            if (inputManager.direction.x < 0) {
                 currentMoveDirection = Direction.Left;
                 FixedPlayerModelRotation(-90);
             }
 
-            if (inputManager.direction.z > 0)
-            {
+            if (inputManager.direction.z > 0) {
                 currentMoveDirection = Direction.Forward;
                 FixedPlayerModelRotation(0);
             }
 
-            if (inputManager.direction.z < 0)
-            {
+            if (inputManager.direction.z < 0) {
                 currentMoveDirection = Direction.BackWard;
                 FixedPlayerModelRotation(180);
             }
 
-            if (inputManager.direction.x > 0 && inputManager.direction.z > 0)
-            {
+            if (inputManager.direction.x > 0 && inputManager.direction.z > 0) {
                 currentMoveDirection = Direction.ForwardRight;
                 FixedPlayerModelRotation(25);
             }
 
-            if (inputManager.direction.x < 0 && inputManager.direction.z > 0)
-            {
+            if (inputManager.direction.x < 0 && inputManager.direction.z > 0) {
                 currentMoveDirection = Direction.ForwardLeft;
                 FixedPlayerModelRotation(-25);
             }
 
-            if (inputManager.direction.x > 0 && inputManager.direction.z < 0)
-            {
+            if (inputManager.direction.x > 0 && inputManager.direction.z < 0) {
                 currentMoveDirection = Direction.BackwardRight;
                 FixedPlayerModelRotation(115);
-
             }
 
-            if (inputManager.direction.x < 0 && inputManager.direction.z < 0)
-            {
+            if (inputManager.direction.x < 0 && inputManager.direction.z < 0) {
                 currentMoveDirection = Direction.BackwardLeft;
                 FixedPlayerModelRotation(-115);
-
             }
         }
-        else if (currentMoveDirection != Direction.still)
-        {
+        else if (currentMoveDirection != Direction.still) {
             currentMoveDirection = Direction.still;
         }
-
     }
 
-    void FixedPlayerModelRotation(int RotY)
-    {
+    void FixedPlayerModelRotation(int RotY) {
         TargetRotation.y = RotY;
         TargetRotVec.y = RotY;
         RotationDegree = RotY;
     }
 
-    void RotationUpdate()
-    {
+    void RotationUpdate() {
         PlayerModel.transform.localRotation = Quaternion.Slerp(PlayerModel.transform.localRotation, Quaternion.LookRotation(inputManager.direction.normalized), RotationSpeed);
     }
 
@@ -153,29 +132,22 @@ public class PlayerController : MonoBehaviour {
         Jump();
     }
 
-    private void Jump()
-    {
+    private void Jump() {
         rb.AddForce(PlayerModel.transform.up * JumpHeight);
         rb.AddForce(PlayerModel.transform.forward * JumpPower);
     }
 
-    public void MovementUpdate()
-    {
+    public void MovementUpdate() {
         currentSpeed = Mathf.Lerp(currentSpeed, TargetSpeed, Time.deltaTime * SpeedTime);
 
-        if (Physics.Raycast(DistanceToGroundObject.transform.position, -transform.up, out hit))
-        {
+        if (Physics.Raycast(DistanceToGroundObject.transform.position, -transform.up, out hit)) {
             distToGround = hit.distance;
             Debug.DrawLine(DistanceToGroundObject.transform.position, hit.point, Color.cyan);
         }
-        if (IsGrounded)
-        {
-            if (Input.GetButtonDown("Jump"))
-            {
-                if (Input.GetKeyDown(inputManager.run))
-                {
-                    if (!IsJumping)
-                    {
+        if (IsGrounded) {
+            if (Input.GetButtonDown(inputManager.jump)) {
+                if (Input.GetButton(inputManager.run)) {
+                    if (!IsJumping) {
                         IsJumping = true;
                         //rb.AddForce(direction.normalized * JumpPower);
                         //rb.AddForce(Vector3.up * JumpHeight);// lol basic dash
@@ -185,7 +157,7 @@ public class PlayerController : MonoBehaviour {
                         //rb.AddForce(direction * JumpPower); // lol basic dash
                     }
                 }
-                if (!Input.GetKeyDown(inputManager.run))
+                if (!Input.GetButton(inputManager.run))
                 {
                     if (!IsJumping)
                     {
@@ -201,8 +173,7 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
-        if (currentMoveDirection != Direction.still && IsGrounded)
-        {
+        if (currentMoveDirection != Direction.still && IsGrounded) {
             RotationUpdate();
         }
         CheckDirection();
@@ -218,7 +189,7 @@ public class PlayerController : MonoBehaviour {
             }
             if (inputManager.direction != Vector3.zero)
             {
-                if (Input.GetButton("Fire3"))
+                if (Input.GetButton(inputManager.run))
                 {
                     TargetSpeed = MaxRunningSpeed;
                     CurrentSpeedMovement = SpeedMovement.Running;
@@ -247,7 +218,7 @@ public class PlayerController : MonoBehaviour {
 
             if(inputManager.direction != Vector3.zero)
             {
-                if (Input.GetButton("Fire3"))
+                if (Input.GetButton(inputManager.run))
                 {
                     TargetSpeed = MaxRunningSpeed;
                     CurrentSpeedMovement = SpeedMovement.Running;
