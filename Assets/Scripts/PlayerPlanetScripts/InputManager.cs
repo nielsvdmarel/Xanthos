@@ -50,7 +50,7 @@ public class InputManager : MonoBehaviour
 
     void CheckForController() {
         names = Input.GetJoystickNames();
-        if (names.Length > 0)
+        if (names.Length >= 0)
         {
             for (int x = 0; x < names.Length; x++)
             {
