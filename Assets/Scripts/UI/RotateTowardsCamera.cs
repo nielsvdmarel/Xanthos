@@ -14,9 +14,9 @@ public class RotateTowardsCamera : MonoBehaviour {
     {
         if (RotateTowardsObject)
         {
-            //Vector3 targetpos = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
-            //transform.LookAt(targetpos);
-            //transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
+            Vector3 targetpos = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
+            transform.LookAt(targetpos);
+            transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
             //now working with faux gravity system
         }
 	}
