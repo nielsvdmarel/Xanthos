@@ -5,9 +5,13 @@ using System.Linq;
 
 public class PlanetTextureLocationScript : MonoBehaviour
 {
+    public InputManager inputManager;
+    public PlayerController playerController;
     public Vector2 planetlocation;
     [SerializeField]
-    private float walkSpeed;
+    private float walkPixelSpeed;
+    [SerializeField]
+    private float RunPixelSpeed;
     [SerializeField]
     private Texture2D PlanetMap;
     private int[] textureColorCords = new int[262144];
@@ -39,42 +43,41 @@ public class PlanetTextureLocationScript : MonoBehaviour
     void Update()
     {
         FixCords();
-        if (x != xold)
-        {
+
+        if (x != xold) {
             TestAllPoints();
             xold = x;
         }
-         
-        if (y != yold)
-        {
+
+        if (y != yold) {
             TestAllPoints();
             yold = y;
-        }  
-
-        if (Input.GetKey(KeyCode.W))
-        {
-            planetlocation.y += walkSpeed;
         }
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (!playerController.isStoppedByCollider)
         {
-            GetTexturePoint();
-            GetTexturePointUp();
-        }
+            if (inputManager.direction.normalized.z > 0)
+            {
+                //W or Forward
+                planetlocation.y += walkPixelSpeed;
+            }
 
-        if (Input.GetKey(KeyCode.S))
-        {
-            planetlocation.y -= walkSpeed;
-        }
+            if (inputManager.direction.normalized.z < 0)
+            {
+                //S or Bakcward
+                planetlocation.y -= walkPixelSpeed;
+            }
 
-        if (Input.GetKey(KeyCode.D))
-        {
-            planetlocation.x += walkSpeed;
-        }
+            if (inputManager.direction.normalized.x > 0)
+            {
+                //D or Right
+                planetlocation.x += walkPixelSpeed;
+            }
 
-        if (Input.GetKey(KeyCode.A))
-        {
-            planetlocation.x -= walkSpeed;
+            if (inputManager.direction.normalized.x < 0)
+            {
+                //A or Left
+                planetlocation.x -= walkPixelSpeed;
+            }
         }
     }
 

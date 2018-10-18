@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour {
     public Direction currentMoveDirection;
     public enum SpeedMovement { Idle, Walking, Running}
     public SpeedMovement CurrentSpeedMovement;
+    public bool HasMoved = false;
     [Header("Player rotation")]
     public GameObject PlayerModel;
     public float RotationDegree;
@@ -41,7 +42,11 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private FauxGravityAttractor CurrentGravityAttractor;
     [Header("Planet")]
     [SerializeField] private Transform PlanetTransform;
-
+    [Header("Isreally movement section")]
+    //
+    [SerializeField]
+    private bool ismoving;
+    public bool isStoppedByCollider;
     void Start()
     {
         CurrentGravityBody = this.GetComponent<FauxGravityBody>();
@@ -57,7 +62,8 @@ public class PlayerController : MonoBehaviour {
 
     void Update()
     {
-        MovementUpdate();
+       MovementUpdate();
+       CheckTrueMovement();
     }
 
     void FixedUpdate()
@@ -246,6 +252,11 @@ public class PlayerController : MonoBehaviour {
             IsJumping = false;
             SetGravityLower(-10); // weg halen als er andere gravtiy's worden veranderd, zoals een + gravity bij damage etc. overide nu alles
         }
+
+        if (other.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+        {
+            isStoppedByCollider = true;
+        }
     }
 
     void OnCollisionExit(Collision other)
@@ -254,6 +265,28 @@ public class PlayerController : MonoBehaviour {
         {
             IsGrounded = false;
             SetGravityLower(-4); // weg halen als er andere gravtiy's worden veranderd, zoals een + gravity bij damage etc. overide nu alles
+        }
+
+        if (other.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+        {
+            isStoppedByCollider = false;
+        }
+    }
+
+    void CheckTrueMovement()
+    {
+        // replace with degrees from planet to player check
+        float forwardTest;
+        forwardTest = Vector3.Dot(-inputManager.direction.normalized, transform.position.normalized);
+        //Debug.Log(forwardTest);
+        if (forwardTest != 0)
+        {
+            ismoving = true;
+        }
+
+        else
+        {
+            ismoving = false;
         }
     }
 }

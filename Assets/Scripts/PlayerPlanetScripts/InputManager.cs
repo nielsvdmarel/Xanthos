@@ -42,6 +42,7 @@ public class InputManager : MonoBehaviour
         if (direction.magnitude > 1) {
             direction = direction.normalized; // stops diagonal movement from being faster than straight movement
         }
+        //Debug.Log(direction);
     }
 
     private void FixedUpdate() {
