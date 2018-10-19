@@ -7,6 +7,13 @@ public class PlanetTextureLocationScript : MonoBehaviour
 {
     public InputManager inputManager;
     public PlayerController playerController;
+    public SphereCollider CurrentPlanetSphereCollider;
+    public float currentRadius;
+    public float secondRadius;
+    public float thirdRadius;
+    public float SDistance;
+    public Vector3 LastCheckedPos;
+
     public Vector2 planetlocation;
     [SerializeField]
     private float walkPixelSpeed;
@@ -34,6 +41,8 @@ public class PlanetTextureLocationScript : MonoBehaviour
 
     void Start()
     {
+        LastCheckedPos = this.transform.position;
+        GetNewPlanetRadius();
         SetTextureColorCords();
         currentActivePixels = new List<Vector2>();
         xold = x;
@@ -43,7 +52,7 @@ public class PlanetTextureLocationScript : MonoBehaviour
     void Update()
     {
         FixCords();
-
+        SphereDistance(LastCheckedPos, transform.position);
         if (x != xold) {
             TestAllPoints();
             xold = x;
@@ -246,4 +255,22 @@ public class PlanetTextureLocationScript : MonoBehaviour
         GetTexturePointLeft();
         GetTexturePointRight();
     }
+
+    void GetNewPlanetRadius()
+    {
+        CurrentPlanetSphereCollider = this.gameObject.GetComponent<FauxGravityBody>().attractor.gameObject.GetComponent<SphereCollider>();
+        currentRadius = (CurrentPlanetSphereCollider.radius) * (CurrentPlanetSphereCollider.gameObject.transform.localScale.x);
+        secondRadius = CurrentPlanetSphereCollider.gameObject.GetComponent<Renderer>().bounds.extents.y;
+
+    }
+
+    public void SphereDistance(Vector3 point1, Vector3 point2)
+    {
+       SDistance = Mathf.Atan((Vector3.Magnitude((Vector3.Cross(point1, point2)))) / (Vector3.Dot(point1, point2)));
+        if (SDistance > .05f)
+        {
+            LastCheckedPos = transform.position;
+        }
+    }
+
 }

@@ -669,6 +669,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputManager: {fileID: 130243367}
   playerController: {fileID: 130243365}
+  CurrentPlanetSphereCollider: {fileID: 0}
+  currentRadius: 0
+  secondRadius: 0
+  thirdRadius: 0
+  SDistance: 0
+  LastCheckedPos: {x: 0, y: 0, z: 0}
   planetlocation: {x: 250, y: 250}
   walkPixelSpeed: 0.05
   RunPixelSpeed: 0.07
@@ -784,6 +790,10 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6e4d0f6e3bf7bb1418cb8dbe7b9b176d, type: 3}
       propertyPath: m_LocalScale.z
+      value: 532.1153
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 6e4d0f6e3bf7bb1418cb8dbe7b9b176d, type: 3}
+      propertyPath: m_LocalScale.x
       value: 532.1153
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -6692,7 +6702,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.009999998
-  m_Center: {x: 0.000000016763806, y: 0.0000000032596283, z: -2.3161057e-23}
+  m_Center: {x: 0.000000016763806, y: 0.0000000032596283, z: 0}
 --- !u!4 &1070570985 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 6e4d0f6e3bf7bb1418cb8dbe7b9b176d,
@@ -11106,45 +11116,13 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.009999998
-  m_Center: {x: 0.000000016763806, y: 0.0000000032596283, z: -2.3161057e-23}
+  m_Radius: 0.009999997
+  m_Center: {x: 0.000000016763805, y: 0.0000000032596281, z: -2.3161057e-23}
 --- !u!4 &2133830261 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 6e4d0f6e3bf7bb1418cb8dbe7b9b176d,
     type: 3}
   m_PrefabInternal: {fileID: 144583887}
---- !u!218 &2133830262
-Terrain:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2133830256}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_TerrainData: {fileID: 0}
-  m_TreeDistance: 5000
-  m_TreeBillboardDistance: 50
-  m_TreeCrossFadeLength: 5
-  m_TreeMaximumFullLODCount: 50
-  m_DetailObjectDistance: 80
-  m_DetailObjectDensity: 1
-  m_HeightmapPixelError: 5
-  m_SplatMapDistance: 1000
-  m_HeightmapMaximumLOD: 0
-  m_CastShadows: 1
-  m_DrawHeightmap: 1
-  m_DrawTreesAndFoliage: 1
-  m_ReflectionProbeUsage: 1
-  m_MaterialType: 0
-  m_LegacySpecular:
-    serializedVersion: 2
-    rgba: 4286545791
-  m_LegacyShininess: 0.078125
-  m_MaterialTemplate: {fileID: 0}
-  m_BakeLightProbesForTrees: 1
-  m_PreserveTreePrototypeLayers: 0
-  m_ScaleInLightmap: 1
-  m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &2135094818 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1702041064841686, guid: 5366f3f8dbe09364882e94249246df72,
