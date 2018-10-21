@@ -67,25 +67,53 @@ public class PlanetTextureLocationScript : MonoBehaviour
             if (inputManager.direction.normalized.z > 0)
             {
                 //W or Forward
-                planetlocation.y += walkPixelSpeed;
+                if (playerController.CurrentSpeedMovement == PlayerController.SpeedMovement.Walking)
+                {
+                    planetlocation.y += walkPixelSpeed;
+                }
+                if (playerController.CurrentSpeedMovement == PlayerController.SpeedMovement.Running)
+                {
+                    planetlocation.y += RunPixelSpeed;
+                }
             }
 
             if (inputManager.direction.normalized.z < 0)
             {
                 //S or Bakcward
-                planetlocation.y -= walkPixelSpeed;
+                if (playerController.CurrentSpeedMovement == PlayerController.SpeedMovement.Walking)
+                {
+                    planetlocation.y -= walkPixelSpeed;
+                }
+                if (playerController.CurrentSpeedMovement == PlayerController.SpeedMovement.Running)
+                {
+                    planetlocation.y -= RunPixelSpeed;
+                }
             }
 
             if (inputManager.direction.normalized.x > 0)
             {
                 //D or Right
-                planetlocation.x += walkPixelSpeed;
+                if (playerController.CurrentSpeedMovement == PlayerController.SpeedMovement.Walking)
+                {
+                    planetlocation.x += walkPixelSpeed;
+                }
+                if (playerController.CurrentSpeedMovement == PlayerController.SpeedMovement.Running)
+                {
+                    planetlocation.x += RunPixelSpeed;
+                }
             }
 
             if (inputManager.direction.normalized.x < 0)
             {
                 //A or Left
-                planetlocation.x -= walkPixelSpeed;
+                if (playerController.CurrentSpeedMovement == PlayerController.SpeedMovement.Walking)
+                {
+                    planetlocation.x -= walkPixelSpeed;
+                }
+                if (playerController.CurrentSpeedMovement == PlayerController.SpeedMovement.Running)
+                {
+                    planetlocation.x -= RunPixelSpeed;
+                }
             }
         }
     }

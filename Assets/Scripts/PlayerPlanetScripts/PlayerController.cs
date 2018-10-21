@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour {
     public bool IsJumping;
     public enum Direction { Forward, BackWard, Left, Right, ForwardLeft, ForwardRight, BackwardLeft, BackwardRight, still };
     public Direction currentMoveDirection;
-    public enum SpeedMovement { Idle, Walking, Running}
+    public enum SpeedMovement { Idle, Walking, Running};
     public SpeedMovement CurrentSpeedMovement;
     public bool HasMoved = false;
     [Header("Player rotation")]

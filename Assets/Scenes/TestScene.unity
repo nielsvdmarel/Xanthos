@@ -676,8 +676,8 @@ MonoBehaviour:
   SDistance: 0
   LastCheckedPos: {x: 0, y: 0, z: 0}
   planetlocation: {x: 250, y: 250}
-  walkPixelSpeed: 0.05
-  RunPixelSpeed: 0.07
+  walkPixelSpeed: 0.02
+  RunPixelSpeed: 0.06
   PlanetMap: {fileID: 2800000, guid: 28a34dc6fff1b0e4b9f82bffd6146e3e, type: 3}
   currentActivePixels: []
   largenum: 0
