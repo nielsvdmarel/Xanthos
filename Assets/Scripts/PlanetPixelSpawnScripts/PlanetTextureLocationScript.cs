@@ -39,6 +39,17 @@ public class PlanetTextureLocationScript : MonoBehaviour
     private int fullScanPixels;
     public Color testColor;
 
+    [SerializeField]
+    private float spX;
+    [SerializeField]
+    private float spY;
+    [SerializeField]
+    private float SphereFields = 40;
+    [SerializeField]
+    private float currentSphereFieldx;
+    [SerializeField]
+    private float currentSphereFieldy;
+
     void Start()
     {
         LastCheckedPos = this.transform.position;
@@ -51,6 +62,7 @@ public class PlanetTextureLocationScript : MonoBehaviour
 
     void Update()
     {
+        SphereToCartesian();
         FixCords();
         SphereDistance(LastCheckedPos, transform.position);
         if (x != xold) {
@@ -288,7 +300,7 @@ public class PlanetTextureLocationScript : MonoBehaviour
     {
         CurrentPlanetSphereCollider = this.gameObject.GetComponent<FauxGravityBody>().attractor.gameObject.GetComponent<SphereCollider>();
         currentRadius = (CurrentPlanetSphereCollider.radius) * (CurrentPlanetSphereCollider.gameObject.transform.localScale.x);
-        secondRadius = CurrentPlanetSphereCollider.gameObject.GetComponent<Renderer>().bounds.extents.y;
+        secondRadius = CurrentPlanetSphereCollider.gameObject.GetComponent<Renderer>().bounds.extents.x;
 
     }
 
@@ -299,6 +311,18 @@ public class PlanetTextureLocationScript : MonoBehaviour
         {
             LastCheckedPos = transform.position;
         }
+    }
+
+    public void SphereToCartesian()
+    {
+        spX = transform.position.x;
+        spY = transform.position.y;
+        float theta = (Mathf.PI * spX);
+        float phi = (Mathf.PI * spY);
+        float x = 8.32f * Mathf.Sin(theta) * Mathf.Cos(phi);
+        float y = 8.32f * Mathf.Sin(theta) * Mathf.Sin(phi);
+        float z = 8.32f * Mathf.Cos(theta);
+     
     }
 
 }
