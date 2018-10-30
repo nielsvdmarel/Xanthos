@@ -13,7 +13,6 @@ public class PlanetTextureLocationScript : MonoBehaviour
     public float thirdRadius;
     public float SDistance;
     public Vector3 LastCheckedPos;
-
     public Vector2 planetlocation;
     [SerializeField]
     private float walkPixelSpeed;
@@ -27,6 +26,9 @@ public class PlanetTextureLocationScript : MonoBehaviour
     private List<Vector2> currentActivePixels;
     public int largenum;
     public Color mainColor;
+
+    public GameObject RotationObjectX;
+    public GameObject RotationObjectY;
 
     //cords
     public int x;
@@ -51,6 +53,8 @@ public class PlanetTextureLocationScript : MonoBehaviour
 
     void Update()
     {
+        FixRotatorObjectY();
+        FixRotatorObjectX();
         FixCords();
         SphereDistance(LastCheckedPos, transform.position);
         if (x != xold) {
@@ -289,6 +293,8 @@ public class PlanetTextureLocationScript : MonoBehaviour
         CurrentPlanetSphereCollider = this.gameObject.GetComponent<FauxGravityBody>().attractor.gameObject.GetComponent<SphereCollider>();
         currentRadius = (CurrentPlanetSphereCollider.radius) * (CurrentPlanetSphereCollider.gameObject.transform.localScale.x);
         secondRadius = CurrentPlanetSphereCollider.gameObject.GetComponent<Renderer>().bounds.extents.y;
+        RotationObjectX.transform.position = CurrentPlanetSphereCollider.gameObject.transform.position;
+        RotationObjectY.transform.position = CurrentPlanetSphereCollider.gameObject.transform.position;
 
     }
 
@@ -298,7 +304,35 @@ public class PlanetTextureLocationScript : MonoBehaviour
         if (SDistance > .05f)
         {
             LastCheckedPos = transform.position;
+            
         }
+    }
+
+    public void FixRotatorObjectX()
+    {
+        Vector3 lookPos = transform.position - RotationObjectX.transform.position;
+        lookPos.x = 0;
+        var rotation = Quaternion.LookRotation(lookPos);
+        RotationObjectX.transform.rotation = Quaternion.Slerp(RotationObjectX.transform.rotation, rotation, Time.deltaTime * 100f);
+
+    }
+
+    public void SphereDistanceX(Vector3 pointXNorm, Vector3 pointXPlayer)
+    {
+
+    }
+
+    public void FixRotatorObjectY()
+    {
+        Vector3 lookPos = transform.position - RotationObjectY.transform.position;
+        lookPos.z = 0;
+        var rotation = Quaternion.LookRotation(lookPos);
+        RotationObjectY.transform.rotation = Quaternion.Slerp(RotationObjectY.transform.rotation, rotation, Time.deltaTime * 100f);
+    }
+
+    public void SphereDistanceY(Vector3 pointYNorm, Vector3 pointYPlayer)
+    {
+
     }
 
 }
