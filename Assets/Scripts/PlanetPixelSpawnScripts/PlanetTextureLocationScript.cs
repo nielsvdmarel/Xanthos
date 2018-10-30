@@ -33,13 +33,24 @@ public class PlanetTextureLocationScript : MonoBehaviour
     //cords
     public int x;
     private int xold;
-    public int y; 
+    public int y;
     private int yold;
     [SerializeField]
     private int checkSpaceHalf;
     [SerializeField]
     private int fullScanPixels;
     public Color testColor;
+
+    [SerializeField]
+    private float spX;
+    [SerializeField]
+    private float spY;
+    [SerializeField]
+    private float SphereFields = 40;
+    [SerializeField]
+    private float currentSphereFieldx;
+    [SerializeField]
+    private float currentSphereFieldy;
 
     void Start()
     {
@@ -53,6 +64,7 @@ public class PlanetTextureLocationScript : MonoBehaviour
 
     void Update()
     {
+        SphereToCartesian();
         FixRotatorObjectY();
         FixRotatorObjectX();
         FixCords();
@@ -156,7 +168,7 @@ public class PlanetTextureLocationScript : MonoBehaviour
     void GetTexturePoint()
     {
         //testColor = texCords[250];
-        //x plus y keer breedte 
+        //x plus y keer breedte
         //currennumb = 118272;
         //0 = 500
         //500 - 40 = 460;
@@ -261,7 +273,7 @@ public class PlanetTextureLocationScript : MonoBehaviour
 
         for (int i = 0; i < fullScanPixels; i++)
         {
-            
+
             int checkpointRight = Rightpointx + ((PlanetMap.height - (Rightpointy + i)) * PlanetMap.width);
             CurrentColor = texCords[checkpointRight];
             if (CurrentColor != mainColor)
@@ -295,6 +307,7 @@ public class PlanetTextureLocationScript : MonoBehaviour
         secondRadius = CurrentPlanetSphereCollider.gameObject.GetComponent<Renderer>().bounds.extents.y;
         RotationObjectX.transform.position = CurrentPlanetSphereCollider.gameObject.transform.position;
         RotationObjectY.transform.position = CurrentPlanetSphereCollider.gameObject.transform.position;
+        //secondRadius = CurrentPlanetSphereCollider.gameObject.GetComponent<Renderer>().bounds.extents.x;
 
     }
 
@@ -304,7 +317,7 @@ public class PlanetTextureLocationScript : MonoBehaviour
         if (SDistance > .05f)
         {
             LastCheckedPos = transform.position;
-            
+
         }
     }
 
@@ -334,5 +347,15 @@ public class PlanetTextureLocationScript : MonoBehaviour
     {
 
     }
+
+    public void SphereToCartesian()
+    {
+        spX = transform.position.x;
+        spY = transform.position.y;
+        float theta = (Mathf.PI * spX);
+        float phi = (Mathf.PI * spY);
+        float x = 8.32f * Mathf.Sin(theta) * Mathf.Cos(phi);
+        float y = 8.32f * Mathf.Sin(theta) * Mathf.Sin(phi);
+        float z = 8.32f * Mathf.Cos(theta);
 
 }
