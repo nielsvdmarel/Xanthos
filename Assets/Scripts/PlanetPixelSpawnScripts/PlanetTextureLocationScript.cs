@@ -357,5 +357,6 @@ public class PlanetTextureLocationScript : MonoBehaviour
         float x = 8.32f * Mathf.Sin(theta) * Mathf.Cos(phi);
         float y = 8.32f * Mathf.Sin(theta) * Mathf.Sin(phi);
         float z = 8.32f * Mathf.Cos(theta);
+    }
 
 }
