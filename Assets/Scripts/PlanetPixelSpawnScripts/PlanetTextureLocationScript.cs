@@ -51,7 +51,12 @@ public class PlanetTextureLocationScript : MonoBehaviour
     private float currentSphereFieldx;
     [SerializeField]
     private float currentSphereFieldy;
-
+    [Header("RayCast Check tests")]
+    public GameObject LocalDistanceCheckObject;
+    public Transform XCheckObject;
+    public Transform YCheckObject;
+    [SerializeField]
+    private float DistanceX, DistanceY;
     void Start()
     {
         LastCheckedPos = this.transform.position;
@@ -64,6 +69,11 @@ public class PlanetTextureLocationScript : MonoBehaviour
 
     void Update()
     {
+        RayCastCheck();
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            SetObjectOnCurrentPos();
+        }
         SphereToCartesian();
         FixRotatorObjectY();
         FixRotatorObjectX();
@@ -357,6 +367,19 @@ public class PlanetTextureLocationScript : MonoBehaviour
         float x = 8.32f * Mathf.Sin(theta) * Mathf.Cos(phi);
         float y = 8.32f * Mathf.Sin(theta) * Mathf.Sin(phi);
         float z = 8.32f * Mathf.Cos(theta);
+    }
+
+    public void SetObjectOnCurrentPos()
+    {
+        LocalDistanceCheckObject.transform.localPosition = this.transform.position;
+        LocalDistanceCheckObject.transform.rotation = this.transform.rotation;
+    }
+
+    public void RayCastCheck()
+    {
+        RaycastHit hit;
+        Ray ray = new Ray(LocalDistanceCheckObject.transform.position, transform.position - LocalDistanceCheckObject.transform.position);
+        Debug.DrawRay(LocalDistanceCheckObject.transform.position, transform.position - LocalDistanceCheckObject.transform.position);
     }
 
 }
