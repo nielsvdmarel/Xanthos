@@ -53,10 +53,20 @@ public class PlanetTextureLocationScript : MonoBehaviour
     private float currentSphereFieldy;
     [Header("RayCast Check tests")]
     public GameObject LocalDistanceCheckObject;
-    public Transform XCheckObject;
-    public Transform YCheckObject;
+    public GameObject MoveObject;
+    public GameObject xLeft;
+    public GameObject xRight;
+    public GameObject yUp;
+    public GameObject yDown;
+
     [SerializeField]
-    private float DistanceX, DistanceY;
+    private float XLeft;
+    [SerializeField]
+    private float XRight;
+    [SerializeField]
+    private float YUp;
+    [SerializeField]
+    private float YDown;
     void Start()
     {
         LastCheckedPos = this.transform.position;
@@ -70,10 +80,9 @@ public class PlanetTextureLocationScript : MonoBehaviour
     void Update()
     {
         RayCastCheck();
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            SetObjectOnCurrentPos();
-        }
+       
+        SetObjectOnCurrentPos();
+
         SphereToCartesian();
         FixRotatorObjectY();
         FixRotatorObjectX();
@@ -371,15 +380,40 @@ public class PlanetTextureLocationScript : MonoBehaviour
 
     public void SetObjectOnCurrentPos()
     {
-        LocalDistanceCheckObject.transform.localPosition = this.transform.position;
-        LocalDistanceCheckObject.transform.rotation = this.transform.rotation;
+        MoveObject.transform.localPosition = this.transform.position;
+        MoveObject.transform.localRotation = this.transform.rotation;
     }
 
     public void RayCastCheck()
     {
-        RaycastHit hit;
-        Ray ray = new Ray(LocalDistanceCheckObject.transform.position, transform.position - LocalDistanceCheckObject.transform.position);
-        Debug.DrawRay(LocalDistanceCheckObject.transform.position, transform.position - LocalDistanceCheckObject.transform.position);
+        RaycastHit HitYUp;
+        RaycastHit HitYDown;
+        RaycastHit hitXLeft;
+        RaycastHit hitXRight;
+
+        //Xleft
+        Physics.Linecast(xLeft.transform.position, LocalDistanceCheckObject.transform.position, out hitXLeft);
+        Debug.DrawLine(xLeft.transform.position, LocalDistanceCheckObject.transform.position, Color.red);
+        XLeft = hitXLeft.distance;
+
+        //XRight
+        Physics.Linecast(xRight.transform.position, LocalDistanceCheckObject.transform.position, out hitXRight);
+        Debug.DrawLine(xRight.transform.position, LocalDistanceCheckObject.transform.position, Color.red);
+        XRight = hitXRight.distance;
+        
+        //YUp
+        Physics.Linecast(yUp.transform.position, LocalDistanceCheckObject.transform.position, out HitYUp);
+        Debug.DrawLine(yUp.transform.position, LocalDistanceCheckObject.transform.position, Color.blue);
+        YUp = HitYUp.distance;
+        
+        //YDown
+        Physics.Linecast(yDown.transform.position, LocalDistanceCheckObject.transform.position, out HitYDown);
+        Debug.DrawLine(yDown.transform.position, LocalDistanceCheckObject.transform.position, Color.blue);
+        YDown = HitYDown.distance;
+
+        //Physics.Linecast(LocalDistanceCheckObject.transform.position, transform.position, out hit);
+        //Debug.DrawLine(LocalDistanceCheckObject.transform.position, transform.position);
+        //Debug.Log(hit.distance);
     }
 
 }
