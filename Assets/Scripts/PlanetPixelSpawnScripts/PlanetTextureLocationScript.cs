@@ -41,6 +41,13 @@ public class PlanetTextureLocationScript : MonoBehaviour
     public GameObject yUp;
     public GameObject yDown;
 
+    public Vector3 Xdifference;
+    public Vector3 YDifference;
+    public GameObject currentPlanet;
+    public GameObject Main4Points;
+    public GameObject LeftUp, LeftDown, RightUp, RightDown;
+
+
     [SerializeField]
     private float XLeft;
     [SerializeField]
@@ -49,6 +56,8 @@ public class PlanetTextureLocationScript : MonoBehaviour
     private float YUp;
     [SerializeField]
     private float YDown;
+
+    public float PlanetXLeft, PlanetXRight, PlanetYUp, PlanetYDown;
 
     void Start()
     {
@@ -60,8 +69,6 @@ public class PlanetTextureLocationScript : MonoBehaviour
 
     void Update()
     {
-        //MiddlePointY.transform.localRotation = this.transform.rotation;
-        //MiddlePointX.transform.localRotation = this.transform.rotation;
         RayCastCheck();
         FixCords();
         CheckXDistance();
@@ -307,13 +314,15 @@ public class PlanetTextureLocationScript : MonoBehaviour
     public void SetObjectOnCurrentPosX()
     {
         MiddlePointX.transform.localPosition = this.transform.position;
-        MiddlePointX.transform.localRotation = this.transform.rotation;
+        MiddlePointX.transform.localRotation = transform.localRotation;
+        
     }
 
     public void SetObjectOnCurrentPosY()
     {
         MiddlePointY.transform.localPosition = this.transform.position;
-        MiddlePointY.transform.localRotation = this.transform.rotation;
+        MiddlePointY.transform.localRotation = transform.localRotation;
+       
     }
 
     public void CheckXDistance()
@@ -332,37 +341,84 @@ public class PlanetTextureLocationScript : MonoBehaviour
 
     public void RayCastCheck()
     {
+        //MiddlePointY.transform.localRotation = this.transform.rotation;
+        //MiddlePointX.transform.localRotation = this.transform.rotation;
+        Main4Points.transform.position = transform.position;
+        Main4Points.transform.rotation = transform.rotation;
+
         RaycastHit HitYUp;
         RaycastHit HitYDown;
         RaycastHit hitXLeft;
         RaycastHit hitXRight;
 
+        RaycastHit HitYUpPlanet, HitYDownPlanet, HitXLeftPlanet, HitXRightPlanet;
+
         //Xleft
         Physics.Linecast(xLeft.transform.position, LocalDistanceCheckObject.transform.position, out hitXLeft);
         Debug.DrawLine(xLeft.transform.position, LocalDistanceCheckObject.transform.position, Color.red);
         XLeft = hitXLeft.distance;
-
         //XRight
         Physics.Linecast(xRight.transform.position, LocalDistanceCheckObject.transform.position, out hitXRight);
         Debug.DrawLine(xRight.transform.position, LocalDistanceCheckObject.transform.position, Color.red);
-        XRight = hitXRight.distance;
-        
+        XRight = hitXRight.distance; 
         //YUp
         Physics.Linecast(yUp.transform.position, LocalDistanceCheckObject.transform.position, out HitYUp);
         Debug.DrawLine(yUp.transform.position, LocalDistanceCheckObject.transform.position, Color.blue);
         YUp = HitYUp.distance;
-        
         //YDown
         Physics.Linecast(yDown.transform.position, LocalDistanceCheckObject.transform.position, out HitYDown);
         Debug.DrawLine(yDown.transform.position, LocalDistanceCheckObject.transform.position, Color.blue);
         YDown = HitYDown.distance;
 
-        //Physics.Linecast(LocalDistanceCheckObject.transform.position, transform.position, out hit);
-        //Debug.DrawLine(LocalDistanceCheckObject.transform.position, transform.position);
-        //Debug.Log(hit.distance);
 
-        MiddlePointX.transform.position = new Vector3(MiddlePointX.transform.localPosition.x, this.transform.localPosition.y, this.transform.position.z);
-        MiddlePointY.transform.position = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y, MiddlePointY.transform.position.z);
+        // planet looker
+        //
+        //
+        Physics.Linecast(xLeft.transform.position, currentPlanet.transform.position, out HitXLeftPlanet);
+        Debug.DrawLine(xLeft.transform.position, currentPlanet.transform.position, Color.yellow);
+        PlanetXLeft = HitXLeftPlanet.distance;
+        if(PlanetXLeft > .30)
+        {
+           
+        }
+
+        Physics.Linecast(xRight.transform.position, currentPlanet.transform.position, out HitXRightPlanet);
+        Debug.DrawLine(xRight.transform.position, currentPlanet.transform.position, Color.yellow);
+        PlanetXRight = HitXRightPlanet.distance;
+        if(PlanetXRight > .30)
+        {
+            
+        }
+
+        Physics.Linecast(yUp.transform.position, currentPlanet.transform.position, out HitYUpPlanet);
+        Debug.DrawLine(yUp.transform.position, currentPlanet.transform.position, Color.yellow);
+        PlanetYUp = HitYUpPlanet.distance;
+        if(PlanetYUp > .30)
+        {
+            
+        }
+
+        Physics.Linecast(yDown.transform.position, currentPlanet.transform.position, out HitYDownPlanet);
+        Debug.DrawLine(yDown.transform.position, currentPlanet.transform.position, Color.yellow);
+        PlanetYDown = HitYDownPlanet.distance;
+        if(PlanetYDown > .30)
+        {
+           
+        }
+
+        
+
+        Xdifference = new Vector3(MiddlePointX.transform.localPosition.x, MiddlePointX.transform.position.y, transform.localPosition.z);
+        YDifference = new Vector3(transform.localPosition.x, MiddlePointY.transform.position.y, MiddlePointY.transform.localPosition.z);
+
+        MiddlePointX.transform.localPosition = Xdifference;
+        MiddlePointY.transform.localPosition = YDifference;
+        //
+        //
+        //
+
+        //MiddlePointX.transform.position = new Vector3(MiddlePointX.transform.position.x, this.transform.localPosition.y, this.transform.localPosition.z);
+        //MiddlePointY.transform.position = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y, MiddlePointY.transform.position.z);
     }
 
 }
