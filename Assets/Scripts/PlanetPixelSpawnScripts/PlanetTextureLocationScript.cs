@@ -7,12 +7,6 @@ public class PlanetTextureLocationScript : MonoBehaviour
 {
     public InputManager inputManager;
     public PlayerController playerController;
-    public SphereCollider CurrentPlanetSphereCollider;
-    public float currentRadius;
-    public float secondRadius;
-    public float thirdRadius;
-    public float SDistance;
-    public Vector3 LastCheckedPos;
     public Vector2 planetlocation;
     [SerializeField]
     private float walkPixelSpeed;
@@ -27,9 +21,6 @@ public class PlanetTextureLocationScript : MonoBehaviour
     public int largenum;
     public Color mainColor;
 
-    public GameObject RotationObjectX;
-    public GameObject RotationObjectY;
-
     //cords
     public int x;
     private int xold;
@@ -41,19 +32,10 @@ public class PlanetTextureLocationScript : MonoBehaviour
     private int fullScanPixels;
     public Color testColor;
 
-    [SerializeField]
-    private float spX;
-    [SerializeField]
-    private float spY;
-    [SerializeField]
-    private float SphereFields = 40;
-    [SerializeField]
-    private float currentSphereFieldx;
-    [SerializeField]
-    private float currentSphereFieldy;
     [Header("RayCast Check tests")]
     public GameObject LocalDistanceCheckObject;
-    public GameObject MoveObject;
+    public GameObject MiddlePointX;
+    public GameObject MiddlePointY;
     public GameObject xLeft;
     public GameObject xRight;
     public GameObject yUp;
@@ -67,10 +49,9 @@ public class PlanetTextureLocationScript : MonoBehaviour
     private float YUp;
     [SerializeField]
     private float YDown;
+
     void Start()
     {
-        LastCheckedPos = this.transform.position;
-        GetNewPlanetRadius();
         SetTextureColorCords();
         currentActivePixels = new List<Vector2>();
         xold = x;
@@ -79,21 +60,25 @@ public class PlanetTextureLocationScript : MonoBehaviour
 
     void Update()
     {
+        //MiddlePointY.transform.localRotation = this.transform.rotation;
+        //MiddlePointX.transform.localRotation = this.transform.rotation;
         RayCastCheck();
-       
-        SetObjectOnCurrentPos();
-
-        SphereToCartesian();
-        FixRotatorObjectY();
-        FixRotatorObjectX();
         FixCords();
-        SphereDistance(LastCheckedPos, transform.position);
-        if (x != xold) {
+        CheckXDistance();
+        CheckYDistance();
+        CheckInputForCord();
+    }
+
+    public void CheckInputForCord()
+    {
+        if (x != xold)
+        {
             TestAllPoints();
             xold = x;
         }
 
-        if (y != yold) {
+        if (y != yold)
+        {
             TestAllPoints();
             yold = y;
         }
@@ -319,69 +304,30 @@ public class PlanetTextureLocationScript : MonoBehaviour
         GetTexturePointRight();
     }
 
-    void GetNewPlanetRadius()
+    public void SetObjectOnCurrentPosX()
     {
-        CurrentPlanetSphereCollider = this.gameObject.GetComponent<FauxGravityBody>().attractor.gameObject.GetComponent<SphereCollider>();
-        currentRadius = (CurrentPlanetSphereCollider.radius) * (CurrentPlanetSphereCollider.gameObject.transform.localScale.x);
-        secondRadius = CurrentPlanetSphereCollider.gameObject.GetComponent<Renderer>().bounds.extents.y;
-        RotationObjectX.transform.position = CurrentPlanetSphereCollider.gameObject.transform.position;
-        RotationObjectY.transform.position = CurrentPlanetSphereCollider.gameObject.transform.position;
-        //secondRadius = CurrentPlanetSphereCollider.gameObject.GetComponent<Renderer>().bounds.extents.x;
-
+        MiddlePointX.transform.localPosition = this.transform.position;
+        MiddlePointX.transform.localRotation = this.transform.rotation;
     }
 
-    public void SphereDistance(Vector3 point1, Vector3 point2)
+    public void SetObjectOnCurrentPosY()
     {
-       SDistance = Mathf.Atan((Vector3.Magnitude((Vector3.Cross(point1, point2)))) / (Vector3.Dot(point1, point2)));
-        if (SDistance > .05f)
-        {
-            LastCheckedPos = transform.position;
+        MiddlePointY.transform.localPosition = this.transform.position;
+        MiddlePointY.transform.localRotation = this.transform.rotation;
+    }
 
+    public void CheckXDistance()
+    {
+        if(XLeft < .10f || XRight < .10f) {
+            SetObjectOnCurrentPosX();
         }
     }
 
-    public void FixRotatorObjectX()
+    public void CheckYDistance()
     {
-        Vector3 lookPos = transform.position - RotationObjectX.transform.position;
-        lookPos.x = 0;
-        var rotation = Quaternion.LookRotation(lookPos);
-        RotationObjectX.transform.rotation = Quaternion.Slerp(RotationObjectX.transform.rotation, rotation, Time.deltaTime * 100f);
-
-    }
-
-    public void SphereDistanceX(Vector3 pointXNorm, Vector3 pointXPlayer)
-    {
-
-    }
-
-    public void FixRotatorObjectY()
-    {
-        Vector3 lookPos = transform.position - RotationObjectY.transform.position;
-        lookPos.z = 0;
-        var rotation = Quaternion.LookRotation(lookPos);
-        RotationObjectY.transform.rotation = Quaternion.Slerp(RotationObjectY.transform.rotation, rotation, Time.deltaTime * 100f);
-    }
-
-    public void SphereDistanceY(Vector3 pointYNorm, Vector3 pointYPlayer)
-    {
-
-    }
-
-    public void SphereToCartesian()
-    {
-        spX = transform.position.x;
-        spY = transform.position.y;
-        float theta = (Mathf.PI * spX);
-        float phi = (Mathf.PI * spY);
-        float x = 8.32f * Mathf.Sin(theta) * Mathf.Cos(phi);
-        float y = 8.32f * Mathf.Sin(theta) * Mathf.Sin(phi);
-        float z = 8.32f * Mathf.Cos(theta);
-    }
-
-    public void SetObjectOnCurrentPos()
-    {
-        MoveObject.transform.localPosition = this.transform.position;
-        MoveObject.transform.localRotation = this.transform.rotation;
+        if(YDown < .10f || YUp < .10f) {
+            SetObjectOnCurrentPosY();
+        }
     }
 
     public void RayCastCheck()
@@ -414,6 +360,9 @@ public class PlanetTextureLocationScript : MonoBehaviour
         //Physics.Linecast(LocalDistanceCheckObject.transform.position, transform.position, out hit);
         //Debug.DrawLine(LocalDistanceCheckObject.transform.position, transform.position);
         //Debug.Log(hit.distance);
+
+        MiddlePointX.transform.position = new Vector3(MiddlePointX.transform.localPosition.x, this.transform.localPosition.y, this.transform.position.z);
+        MiddlePointY.transform.position = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y, MiddlePointY.transform.position.z);
     }
 
 }
