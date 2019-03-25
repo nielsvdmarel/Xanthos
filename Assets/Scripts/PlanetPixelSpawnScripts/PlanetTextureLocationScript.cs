@@ -32,48 +32,15 @@ public class PlanetTextureLocationScript : MonoBehaviour
     private int fullScanPixels;
     public Color testColor;
 
-    [Header("RayCast Check tests")]
-    public GameObject LocalDistanceCheckObject;
-    public GameObject Midle2;
-    public GameObject MiddlePointX;
-    public GameObject MiddlePointY;
-    public GameObject xLeft;
-    public GameObject xRight;
-    public GameObject yUp;
-    public GameObject yDown;
-
-    public Vector3 Xdifference;
-    public Vector3 YDifference;
-    public GameObject currentPlanet;
-    public GameObject Main4Points;
-    public GameObject LeftUp, LeftDown, RightUp, RightDown;
-    public GameObject MiddleObjectInChild;
-
-    [SerializeField]
-    private float XLeft;
-    [SerializeField]
-    private float XRight;
-    [SerializeField]
-    private float YUp;
-    [SerializeField]
-    private float YDown;
-
-    public float PlanetXLeft, PlanetXRight, PlanetYUp, PlanetYDown;
-
-    void Start()
-    {
+    void Start() {
         SetTextureColorCords();
         currentActivePixels = new List<Vector2>();
         xold = x;
         yold = y;
     }
 
-    void Update()
-    {
-        RayCastCheck();
+    void Update() {
         FixCords();
-        CheckXDistance();
-        CheckYDistance();
         CheckInputForCord();
     }
 
@@ -310,130 +277,6 @@ public class PlanetTextureLocationScript : MonoBehaviour
         GetTexturePointDown();
         GetTexturePointLeft();
         GetTexturePointRight();
-    }
-
-    public void SetObjectOnCurrentPosX()
-    {
-        Debug.Log("resetX Side");
-        MiddlePointX.transform.localPosition = this.transform.position;
-        MiddlePointX.transform.localRotation = transform.localRotation;
-        
-    }
-
-    public void SetObjectOnCurrentPosY()
-    {
-        Debug.Log("Reset y side");
-        MiddlePointY.transform.localPosition = this.transform.position;
-        MiddlePointY.transform.localRotation = transform.localRotation;
-       
-    }
-
-    public void CheckXDistance()
-    {
-        if(XLeft < .01f || XRight < .01f) {
-            SetObjectOnCurrentPosX();
-        }
-    }
-
-    public void CheckYDistance()
-    {
-        if(YDown < .01f || YUp < .01f) {
-            SetObjectOnCurrentPosY();
-        }
-    }
-
-    public void RayCastCheck()
-    {
-        //MiddlePointY.transform.localRotation = this.transform.rotation;
-        //MiddlePointX.transform.localRotation = this.transform.rotation;
-        Main4Points.transform.position = transform.position;
-        Main4Points.transform.rotation = transform.rotation;
-
-        RaycastHit HitYUp;
-        RaycastHit HitYDown;
-        RaycastHit hitXLeft;
-        RaycastHit hitXRight;
-
-        RaycastHit HitYUpPlanet, HitYDownPlanet, HitXLeftPlanet, HitXRightPlanet;
-
-        //Xleft
-        Physics.Linecast(xLeft.transform.position, LocalDistanceCheckObject.transform.position, out hitXLeft);
-        Debug.DrawLine(xLeft.transform.position, LocalDistanceCheckObject.transform.position, Color.red);
-        XLeft = hitXLeft.distance;
-        //XRight
-        Physics.Linecast(xRight.transform.position, LocalDistanceCheckObject.transform.position, out hitXRight);
-        Debug.DrawLine(xRight.transform.position, LocalDistanceCheckObject.transform.position, Color.red);
-        XRight = hitXRight.distance; 
-        //YUp
-        Physics.Linecast(yUp.transform.position, Midle2.transform.position, out HitYUp);
-        Debug.DrawLine(yUp.transform.position, Midle2.transform.position, Color.blue);
-        YUp = HitYUp.distance;
-        //YDown
-        Physics.Linecast(yDown.transform.position, Midle2.transform.position, out HitYDown);
-        Debug.DrawLine(yDown.transform.position, Midle2.transform.position, Color.blue);
-        YDown = HitYDown.distance;
-
-
-        // planet looker
-        //
-        //
-        Physics.Linecast(xLeft.transform.position, currentPlanet.transform.position, out HitXLeftPlanet);
-        Debug.DrawLine(xLeft.transform.position, currentPlanet.transform.position, Color.yellow);
-        PlanetXLeft = HitXLeftPlanet.distance;
-        if(PlanetXLeft > .30)
-        {
-           
-        }
-
-        Physics.Linecast(xRight.transform.position, currentPlanet.transform.position, out HitXRightPlanet);
-        Debug.DrawLine(xRight.transform.position, currentPlanet.transform.position, Color.yellow);
-        PlanetXRight = HitXRightPlanet.distance;
-        if(PlanetXRight > .30)
-        {
-            
-        }
-
-        Physics.Linecast(yUp.transform.position, currentPlanet.transform.position, out HitYUpPlanet);
-        Debug.DrawLine(yUp.transform.position, currentPlanet.transform.position, Color.yellow);
-        PlanetYUp = HitYUpPlanet.distance;
-        if(PlanetYUp > .30)
-        {
-            
-        }
-
-        Physics.Linecast(yDown.transform.position, currentPlanet.transform.position, out HitYDownPlanet);
-        Debug.DrawLine(yDown.transform.position, currentPlanet.transform.position, Color.yellow);
-        PlanetYDown = HitYDownPlanet.distance;
-        if(PlanetYDown > .30)
-        {
-           
-        }
-
-        Main4Points.transform.position = transform.position;
-        Main4Points.transform.rotation = transform.rotation;
-
-        // voor het overnemen van de hele positie van de speler, zal gebruikt moeten worden!
-        /*
-        MiddlePointX.transform.position = transform.position;
-        MiddlePointY.transform.position = transform.position;
-        MiddlePointX.transform.rotation = transform.rotation;
-        MiddlePointY.transform.rotation = transform.rotation;
-        */
-        
-
-        // voor het gebruiken van alleen de hoogte van de speler (hoeft niet per se te werken :()
-        //MiddlePointX.transform.position = new Vector3(MiddlePointX.transform.position.x, transform.localPosition.y, MiddlePointX.transform.position.z);
-        //MiddlePointY.transform.position = new Vector3(MiddlePointY.transform.position.x, transform.localPosition.y, MiddlePointY.transform.position.z);
-
-
-        xLeft.transform.position = new Vector3(xLeft.transform.position.x, xLeft.transform.position.y, LocalDistanceCheckObject.transform.position.z);
-        xRight.transform.position = new Vector3(xRight.transform.position.x, xRight.transform.position.y, LocalDistanceCheckObject.transform.position.z);
-
-        yUp.transform.position = new Vector3(Midle2.transform.position.x, yUp.transform.position.y, yUp.transform.position.z);
-        yDown.transform.position = new Vector3(Midle2.transform.position.x, yDown.transform.position.y, yDown.transform.position.z);
-
-        LocalDistanceCheckObject.transform.position = MiddleObjectInChild.transform.position;
-        Midle2.transform.position = MiddleObjectInChild.transform.position;
     }
 
 }
